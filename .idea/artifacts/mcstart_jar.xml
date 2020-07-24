@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact name="mcstart:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/mcstart_jar</output-path>
+    <root id="root">
+      <element id="archive" name="mcstart.jar">
+        <element id="module-output" name="mcstart.main" />
+        <element id="directory" name="META-INF">
+          <element id="dir-copy" path="$PROJECT_DIR$/src/main/kotlin/META-INF" />
+        </element>
+      </element>
+      <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.3.72" />
+      <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72" />
+      <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72" />
+      <element id="library" level="project" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-common:1.3.72" />
+      <element id="library" level="project" name="Gradle: org.jetbrains:annotations:13.0" />
+      <element id="library" level="project" name="Gradle: org.hamcrest:hamcrest-core:1.3" />
+      <element id="library" level="project" name="Gradle: junit:junit:4.12" />
+      <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.8.6" />
+      <element id="library" level="project" name="Gradle: com.github.mgrzeszczak:json-dsl:v1.1" />
+    </root>
+  </artifact>
+</component>
