@@ -4,17 +4,16 @@
 
 package pl.szczodrzynski.mcstart.standalone.packet
 
-import com.github.mgrzeszczak.jsondsl.Json
-import pl.szczodrzynski.mcstart.standalone.Config
+import pl.szczodrzynski.mcstart.standalone.StandaloneConfig
 import pl.szczodrzynski.mcstart.standalone.Packet
 import pl.szczodrzynski.mcstart.standalone.ext.*
 import java.io.ByteArrayInputStream
 import java.net.Socket
 
 class ServerListNickname(
-    config: Config,
     client: Socket,
     packet: Packet,
+    onPlayerJoin: (client: Socket, nickname: String) -> Unit,
     stream: ByteArrayInputStream = packet.data.inputStream()
 ) {
 
@@ -22,14 +21,6 @@ class ServerListNickname(
 
     init {
         log("ServerListNickname(nickname = $nickname)")
-        val output = mutableListOf<Byte>()
-
-        // construct a "disconnect" packet
-        val json = Json.obj {
-            "text" to config.disconnectText
-        }
-        output.writeString(json.toString())
-        Packet.withData(0x00, output).write(client.outputStream)
-        client.close()
+        onPlayerJoin(client, nickname)
     }
 }

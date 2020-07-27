@@ -5,14 +5,14 @@
 package pl.szczodrzynski.mcstart.standalone.packet
 
 import com.github.mgrzeszczak.jsondsl.Json
-import pl.szczodrzynski.mcstart.standalone.Config
+import pl.szczodrzynski.mcstart.standalone.StandaloneConfig
 import pl.szczodrzynski.mcstart.standalone.Packet
 import pl.szczodrzynski.mcstart.standalone.ext.log
 import pl.szczodrzynski.mcstart.standalone.ext.writeString
 import java.net.Socket
 
 class ServerListRequest(
-    config: Config,
+    config: StandaloneConfig,
     client: Socket
 ) {
 

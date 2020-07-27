@@ -17,6 +17,7 @@
       <element id="library" level="project" name="Gradle: junit:junit:4.12" />
       <element id="library" level="project" name="Gradle: com.google.code.gson:gson:2.8.6" />
       <element id="library" level="project" name="Gradle: com.github.mgrzeszczak:json-dsl:v1.1" />
+      <element id="library" level="project" name="Gradle: org.yaml:snakeyaml:1.21" />
     </root>
   </artifact>
 </component>

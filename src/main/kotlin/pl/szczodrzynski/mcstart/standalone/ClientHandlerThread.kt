@@ -11,9 +11,10 @@ import pl.szczodrzynski.mcstart.standalone.packet.ServerListPing
 import pl.szczodrzynski.mcstart.standalone.packet.ServerListRequest
 import java.net.Socket
 
-class ServerThread(
-    val config: Config,
-    val client: Socket
+class ClientHandlerThread(
+        val config: StandaloneConfig,
+        val client: Socket,
+        val onPlayerJoin: (client: Socket, nickname: String) -> Unit
 ) : Thread() {
 
     override fun run() {
@@ -40,7 +41,7 @@ class ServerThread(
                     else {
                         // probably a packet with just the player's nickname
                         // should kick the player already here
-                        ServerListNickname(config, client, packet)
+                        ServerListNickname(client, packet, onPlayerJoin)
                     }
                 }
                 else {
