@@ -17,3 +17,5 @@ fun varLength(number: Int): Int {
     } while (value != 0)
     return numWritten
 }
+
+fun String.convertFormat(): String = replace('&', '§')

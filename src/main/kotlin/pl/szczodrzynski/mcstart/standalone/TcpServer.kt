@@ -6,6 +6,7 @@ package pl.szczodrzynski.mcstart.standalone
 
 import com.github.mgrzeszczak.jsondsl.Json
 import pl.szczodrzynski.mcstart.Config
+import pl.szczodrzynski.mcstart.standalone.ext.convertFormat
 import pl.szczodrzynski.mcstart.standalone.ext.writeString
 import java.net.ServerSocket
 import java.net.Socket
@@ -45,7 +46,7 @@ class TcpServer {
         val json = Json.obj {
             "text" to kickText
                 .replace("\$USERNAME", nickname)
-                .replace("&", "§")
+                .convertFormat()
         }
         output.writeString(json.toString())
         Packet.withData(0x00, output).write(client.outputStream)

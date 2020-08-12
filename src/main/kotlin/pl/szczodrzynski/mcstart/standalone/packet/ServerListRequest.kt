@@ -7,6 +7,7 @@ package pl.szczodrzynski.mcstart.standalone.packet
 import com.github.mgrzeszczak.jsondsl.Json
 import pl.szczodrzynski.mcstart.standalone.StandaloneConfig
 import pl.szczodrzynski.mcstart.standalone.Packet
+import pl.szczodrzynski.mcstart.standalone.ext.convertFormat
 import pl.szczodrzynski.mcstart.standalone.ext.log
 import pl.szczodrzynski.mcstart.standalone.ext.writeString
 import java.net.Socket
@@ -22,7 +23,7 @@ class ServerListRequest(
 
         val json = Json.obj {
             "version" to obj {
-                "name" to config.versionName
+                "name" to config.versionName.convertFormat()
                 "protocol" to config.protocolVersion
             }
             "players" to obj {
@@ -31,7 +32,7 @@ class ServerListRequest(
                 "sample" to array()
             }
             "description" to obj {
-                "text" to config.motd
+                "text" to config.motd.convertFormat()
                 "mcstart" to "mcstart" // to make MCStart detection easier (e.g. with mcstatus python lib)
             }
         }

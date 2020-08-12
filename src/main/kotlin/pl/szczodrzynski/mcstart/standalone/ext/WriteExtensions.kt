@@ -7,9 +7,9 @@ package pl.szczodrzynski.mcstart.standalone.ext
 import java.io.OutputStream
 
 fun MutableList<Byte>.writeString(string: String) {
-    writeVarInt(string.length)
-    string.forEach {
-        add(it.toByte())
+    writeVarInt(string.toByteArray().size)
+    string.toByteArray().forEach {
+        add(it)
     }
 }
 
