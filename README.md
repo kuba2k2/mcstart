@@ -1,12 +1,16 @@
 # MCStart
 Automatically start a Minecraft server whenever a whitelisted player tries to join.
 
-[Download v0.1.0](https://github.com/kuba2k2/MCStart/releases/tag/v0.1.0)
+[Download v0.2.0](https://github.com/kuba2k2/MCStart/releases/tag/v0.2.0)
 
 ## Config
 
 ```yaml
-plugin: {}
+plugin:
+  autoStopEnabled: true # whether to stop the server if all players left
+  autoStopTimeout: 300 # 5 minutes
+  startTimeout: true # whether to start the autoStopTimeout on server start
+  startTimeoutDelay: 60 # delay the timeout on server start
 standalone:
   serverPort: 25565 # should be equal to the server port
 
@@ -28,7 +32,13 @@ standalone:
 
 ## Usage
 
-Put the .jar in `plugins` directory of your server (in order to use the server whitelist).
+Put the .jar in `plugins` directory of your server (in order to use the server whitelist and auto stop functionality).
+
+If used with a Bukkit/Spigot server, it will automatically shut down 
+when no players are online (after a configurable timeout). MCStart will
+be running a fake server again, waiting for a player to start the real server.
+
+This behavior may be configured or disabled in the `plugin` section of the config.
 
 ### As a command
 The working directory is your server directory.
