@@ -1,7 +1,7 @@
 # MCStart
 Automatically start a Minecraft server whenever a whitelisted player tries to join.
 
-[Download v0.2.0](https://github.com/kuba2k2/MCStart/releases/tag/v0.2.0)
+[Download v0.2.1](https://github.com/kuba2k2/MCStart/releases/tag/v0.2.1)
 
 ## Config
 
@@ -29,6 +29,8 @@ standalone:
    - Steve
    - Alex 
 ```
+You can use color codes (`&`) in all string properties.
+The `$USERNAME` placeholder is available in `startingText` and `disconnectText`.
 
 ## Usage
 
