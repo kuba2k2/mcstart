@@ -32,6 +32,7 @@ class ServerListRequest(
             }
             "description" to obj {
                 "text" to config.motd
+                "mcstart" to "mcstart" // to make MCStart detection easier (e.g. with mcstatus python lib)
             }
         }
         output.writeString(json.toString())

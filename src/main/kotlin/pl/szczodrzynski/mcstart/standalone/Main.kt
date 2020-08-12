@@ -23,6 +23,8 @@ fun main(args: Array<String>) {
         }
     }
 
+    println("Server command line: "+args.joinToString(" "))
+
     while (true) {
         TcpServer() // wait for a privileged player join
         McServer(args.joinToString(" ")) // start the Minecraft server
