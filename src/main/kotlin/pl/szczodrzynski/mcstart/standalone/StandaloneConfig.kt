@@ -6,16 +6,16 @@ package pl.szczodrzynski.mcstart.standalone
 
 class StandaloneConfig {
 
-    var serverPort = 25565
+    var serverPort = 25565 // should be equal to the server port
 
-    var protocolVersion = 210
-    var versionName = "1.10.2"
-    var playersOnline = 100
-    var playersMax = -10
+    var protocolVersion = 1 // if equal to your MC client version, it will show player count (below)
+    var versionName = "Stopped" // if protocol version differs from the client, this text will be shown
+    var playersOnline = 0
+    var playersMax = 0
 
-    var motd = "A MCStart sample server"
-    var startingText = "Hi \$USERNAME, the server is now starting..."
-    var disconnectText = "You've been disconnected, as this server is running MCStart"
+    var motd = "The server is stopped, join to start."
+    var startingText = "Hi \$USERNAME, the server is starting..."
+    var disconnectText = "You are not whitelisted to start this server."
 
     var whitelistEnabled = true
     var whitelistUseServer = true
