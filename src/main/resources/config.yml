@@ -5,6 +5,7 @@ plugin:
   startTimeoutDelay: 60 # delay the timeout on server start
 standalone:
   serverPort: 25565 # should be equal to the server port
+  socketTimeout: 5000 # timeout for client connections (recommended)
 
   protocolVersion: 1 # if equal to your MC client version, it will show player count (below)
   versionName: "Stopped" # if protocol version differs from the client, this text will be shown

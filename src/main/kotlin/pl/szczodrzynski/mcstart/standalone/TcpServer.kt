@@ -7,10 +7,10 @@ package pl.szczodrzynski.mcstart.standalone
 import com.github.mgrzeszczak.jsondsl.Json
 import pl.szczodrzynski.mcstart.Config
 import pl.szczodrzynski.mcstart.standalone.ext.convertFormat
+import pl.szczodrzynski.mcstart.standalone.ext.log
 import pl.szczodrzynski.mcstart.standalone.ext.writeString
 import java.net.ServerSocket
 import java.net.Socket
-import java.net.SocketException
 
 class TcpServer {
 
@@ -20,12 +20,12 @@ class TcpServer {
     init {
         println("\n\nServer running on port ${server.localPort}")
         while (!server.isClosed) {
-            val client = try {
-                server.accept()
-            } catch (e: SocketException) {
-                continue
+            try {
+                val client = server.accept()
+                ClientHandlerThread(config, client, this::onPlayerJoin)
+            } catch (e: Exception) {
+                log("!!! The server threw an Exception: \n$e")
             }
-            ClientHandlerThread(config, client, this::onPlayerJoin).start()
         }
     }
 

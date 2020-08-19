@@ -7,6 +7,7 @@ package pl.szczodrzynski.mcstart.standalone
 class StandaloneConfig {
 
     var serverPort = 25565 // should be equal to the server port
+    var socketTimeout = 5000L // timeout for client connections (recommended)
 
     var protocolVersion = 1 // if equal to your MC client version, it will show player count (below)
     var versionName = "Stopped" // if protocol version differs from the client, this text will be shown

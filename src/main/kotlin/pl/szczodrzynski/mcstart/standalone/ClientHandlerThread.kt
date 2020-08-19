@@ -4,6 +4,7 @@
 
 package pl.szczodrzynski.mcstart.standalone
 
+import kotlinx.coroutines.*
 import pl.szczodrzynski.mcstart.standalone.ext.log
 import pl.szczodrzynski.mcstart.standalone.packet.ServerListHandshake
 import pl.szczodrzynski.mcstart.standalone.packet.ServerListNickname
@@ -15,18 +16,27 @@ class ClientHandlerThread(
         val config: StandaloneConfig,
         val client: Socket,
         val onPlayerJoin: (client: Socket, nickname: String) -> Unit
-) : Thread() {
+) : CoroutineScope {
 
-    override fun run() {
-        log("Socket opened - ${client.inetAddress.hostAddress}.")
-        val inputStream = client.inputStream
+    override val coroutineContext = Job() + Dispatchers.IO
 
-        while (!client.isClosed) {
-            if (inputStream.available() > 0) {
-                handlePacket()
+    init {
+        launch(Dispatchers.IO) {
+            withTimeout(config.socketTimeout) {
+
+                log("Socket opened - ${client.inetAddress.hostAddress}.")
+                val inputStream = client.inputStream
+
+                while (isActive && client.isConnected && !client.isClosed && !client.isInputShutdown) {
+                    if (inputStream.available() > 0) {
+                        handlePacket()
+                    }
+                }
             }
+            log("Socket closed.")
+            client.close()
+            cancel()
         }
-        log("Socket closed.")
     }
 
     private fun handlePacket() {
