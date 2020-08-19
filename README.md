@@ -1,7 +1,7 @@
 # MCStart
 Automatically start a Minecraft server whenever a whitelisted player tries to join.
 
-[Download v0.2.1](https://github.com/kuba2k2/MCStart/releases/tag/v0.2.1)
+[Download v0.2.2](https://github.com/kuba2k2/MCStart/releases/tag/v0.2.2)
 
 ## Config
 
