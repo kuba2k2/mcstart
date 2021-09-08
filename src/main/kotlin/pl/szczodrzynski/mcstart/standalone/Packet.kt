@@ -9,7 +9,6 @@ package pl.szczodrzynski.mcstart.standalone
 import pl.szczodrzynski.mcstart.standalone.ext.readVarInt
 import pl.szczodrzynski.mcstart.standalone.ext.varLength
 import pl.szczodrzynski.mcstart.standalone.ext.writeVarInt
-import sun.misc.IOUtils.readNBytes
 import java.io.OutputStream
 import java.net.Socket
 
@@ -26,7 +25,7 @@ data class Packet(
             return Packet(
                 packetId,
                 length,
-                readNBytes(client.inputStream, length)
+                client.inputStream.readNBytes(length)
             )
         }
 

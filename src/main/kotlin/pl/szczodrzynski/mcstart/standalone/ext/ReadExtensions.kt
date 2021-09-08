@@ -4,12 +4,11 @@
 
 package pl.szczodrzynski.mcstart.standalone.ext
 
-import sun.misc.IOUtils.readNBytes
 import java.io.InputStream
 
 fun InputStream.readString(): String {
     val length = readVarInt()
-    return String(readNBytes(this, length))
+    return String(readNBytes(length))
 }
 
 fun InputStream.readNumber(length: Int): Long {
