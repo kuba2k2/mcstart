@@ -7,6 +7,7 @@ package pl.szczodrzynski.mcstart
 class McServer(commandLine: String) {
 
     init {
+        println("----\nRunning MC Server command line: $commandLine\n")
         commandLine.runCommand()
     }
 

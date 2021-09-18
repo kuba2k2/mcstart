@@ -5,6 +5,7 @@
 package pl.szczodrzynski.mcstart.packet
 
 import com.github.mgrzeszczak.jsondsl.Json
+import pl.szczodrzynski.mcstart.Version
 import pl.szczodrzynski.mcstart.config.Config
 import pl.szczodrzynski.mcstart.ext.convertFormat
 import pl.szczodrzynski.mcstart.ext.log
@@ -32,7 +33,7 @@ class ServerListRequest(
             }
             "description" to obj {
                 "text" to config.motdText.convertFormat()
-                "mcstart" to "mcstart" // to make MCStart detection easier (e.g. with mcstatus python lib)
+                "mcstart" to Version.CODE // to make MCStart detection easier (e.g. with mcstatus python lib)
             }
         }
         output.writeString(json.toString())

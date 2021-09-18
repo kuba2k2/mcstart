@@ -22,13 +22,13 @@ class TcpServer(
     private val server = ServerSocket(config.serverPort)
 
     init {
-        println("\n\nServer running on port ${server.localPort}")
+        println("----\nServer running on port ${server.localPort}")
         while (!server.isClosed) {
             try {
                 val client = server.accept()
                 ClientHandlerThread(config, client, this::onPlayerJoin)
             } catch (e: Exception) {
-                log("!!! The server threw an Exception: \n$e")
+                log("!!! The server threw an Exception: $e")
             }
         }
     }
