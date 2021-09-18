@@ -4,6 +4,10 @@
 
 package pl.szczodrzynski.mcstart.ext
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
 fun log(msg: String) {
     println("[${Thread.currentThread().name}] $msg")
 }
@@ -19,3 +23,17 @@ fun varLength(number: Int): Int {
 }
 
 fun String.convertFormat(): String = replace('&', '§')
+
+inline val Int.b get() = this.toByte()
+
+fun CoroutineScope.startCoroutineTimer(delayMillis: Long = 0, repeatMillis: Long = 0, action: suspend () -> Unit) = launch {
+    delay(delayMillis)
+    if (repeatMillis > 0) {
+        while (true) {
+            action()
+            delay(repeatMillis)
+        }
+    } else {
+        action()
+    }
+}

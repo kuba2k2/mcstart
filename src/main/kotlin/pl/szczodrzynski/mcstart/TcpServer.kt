@@ -23,6 +23,7 @@ class TcpServer(
 
     init {
         println("----\nServer running on port ${server.localPort}")
+
         while (!server.isClosed) {
             try {
                 val client = server.accept()

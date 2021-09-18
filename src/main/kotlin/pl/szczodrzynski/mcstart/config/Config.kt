@@ -10,7 +10,6 @@ class Config {
     private val envMapping = mapOf(
         "SERVER_PORT" to "server-port",
         "ENABLE_QUERY" to "enable-query",
-        "QUERY_PORT" to "query.port",
         "MOTD" to "motd",
         "MAX_PLAYERS" to "max-players",
         "ENABLE_WHITELIST" to "white-list",
@@ -29,14 +28,17 @@ class Config {
     }
 
     val serverPort = getInt("SERVER_PORT") ?: 25565
-    val queryPort = getInt("QUERY_PORT") ?: 25565
-
-    private val enableQueryServer = getBoolean("ENABLE_QUERY") ?: true
-    val enableQuery = enableQueryServer && getBoolean("MCS_ENABLE_QUERY") ?: true
 
     val socketTimeout = getLong("MCS_SOCKET_TIMEOUT") ?: 5000L
     val versionProtocol = getInt("MCS_VERSION_PROTOCOL") ?: 1
     val versionName = getString("MCS_VERSION_NAME") ?: "Stopped"
+
+    val autoStop = getBoolean("MCS_AUTO_STOP") ?: false
+    val autoStopServer = getString("MCS_AUTO_STOP_HOSTNAME") ?: "localhost"
+    val autoStopPollingDelay = getInt("MCS_AUTO_STOP_POLLING_DELAY") ?: 60
+    val autoStopPollingInterval = getInt("MCS_AUTO_STOP_POLLING_INTERVAL") ?: 10
+    val autoStopTimeout = getInt("MCS_AUTO_STOP_TIMEOUT") ?: (10 * 60)
+    val autoStopCommand = getString("MCS_AUTO_STOP_COMMAND") ?: "stop"
 
     val playersOnline = getInt("MCS_PLAYERS_ONLINE") ?: 0
     val playersMax = getInt("MCS_PLAYERS_MAX")
@@ -73,6 +75,6 @@ class Config {
     private fun getBoolean(name: String) = getString(name)?.toBoolean()
 
     override fun toString(): String {
-        return "Config(serverPath='$serverPath', serverPort=$serverPort, queryPort=$queryPort, enableQuery=$enableQuery, socketTimeout=$socketTimeout, versionProtocol=$versionProtocol, versionName='$versionName', playersOnline=$playersOnline, playersMax=$playersMax, motdText='$motdText', startingText='$startingText', disconnectText='$disconnectText', whitelistEnabled=$whitelistEnabled, whitelistUseServer=$whitelistUseServer)"
+        return "Config(serverPath='$serverPath', serverPort=$serverPort, socketTimeout=$socketTimeout, versionProtocol=$versionProtocol, versionName='$versionName', autoStop=$autoStop, autoStopServer='$autoStopServer', autoStopPollingDelay=$autoStopPollingDelay, autoStopPollingInterval=$autoStopPollingInterval, autoStopTimeout=$autoStopTimeout, autoStopCommand='$autoStopCommand', playersOnline=$playersOnline, playersMax=$playersMax, motdText='$motdText', startingText='$startingText', disconnectText='$disconnectText', whitelistEnabled=$whitelistEnabled, whitelistUseServer=$whitelistUseServer, whitelistFile=$whitelistFile)"
     }
 }
