@@ -2,10 +2,10 @@
  * Copyright (c) Kuba Szczodrzyński 2020-7-24.
  */
 
-package pl.szczodrzynski.mcstart.standalone
+package pl.szczodrzynski.mcstart
 
 import com.google.gson.JsonParser
-import pl.szczodrzynski.mcstart.Config
+import pl.szczodrzynski.mcstart.config.Config
 import java.io.File
 
 fun main(args: Array<String>) {

@@ -2,10 +2,9 @@
  * Copyright (c) Kuba Szczodrzyński 2020-7-24.
  */
 
-package pl.szczodrzynski.mcstart.standalone.packet
+package pl.szczodrzynski.mcstart.packet
 
-import pl.szczodrzynski.mcstart.standalone.Packet
-import pl.szczodrzynski.mcstart.standalone.ext.*
+import pl.szczodrzynski.mcstart.ext.*
 import java.io.ByteArrayInputStream
 
 class ServerListHandshake(

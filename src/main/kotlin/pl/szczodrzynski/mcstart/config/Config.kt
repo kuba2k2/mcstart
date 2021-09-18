@@ -2,11 +2,10 @@
  * Copyright (c) Kuba Szczodrzyński 2020-7-27.
  */
 
-package pl.szczodrzynski.mcstart
+package pl.szczodrzynski.mcstart.config
 
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
-import pl.szczodrzynski.mcstart.standalone.StandaloneConfig
 import java.io.File
 
 class Config {

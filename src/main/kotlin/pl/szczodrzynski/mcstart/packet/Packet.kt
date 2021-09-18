@@ -4,11 +4,11 @@
 
 @file:Suppress("EXPERIMENTAL_API_USAGE")
 
-package pl.szczodrzynski.mcstart.standalone
+package pl.szczodrzynski.mcstart.packet
 
-import pl.szczodrzynski.mcstart.standalone.ext.readVarInt
-import pl.szczodrzynski.mcstart.standalone.ext.varLength
-import pl.szczodrzynski.mcstart.standalone.ext.writeVarInt
+import pl.szczodrzynski.mcstart.ext.readVarInt
+import pl.szczodrzynski.mcstart.ext.varLength
+import pl.szczodrzynski.mcstart.ext.writeVarInt
 import java.io.OutputStream
 import java.net.Socket
 

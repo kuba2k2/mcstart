@@ -2,7 +2,7 @@
  * Copyright (c) Kuba Szczodrzyński 2020-7-24.
  */
 
-package pl.szczodrzynski.mcstart.standalone.ext
+package pl.szczodrzynski.mcstart.ext
 
 import java.io.OutputStream
 

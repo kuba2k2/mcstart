@@ -2,7 +2,7 @@
  * Copyright (c) Kuba Szczodrzyński 2020-7-24.
  */
 
-package pl.szczodrzynski.mcstart.standalone
+package pl.szczodrzynski.mcstart.config
 
 class StandaloneConfig {
 

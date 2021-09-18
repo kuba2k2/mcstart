@@ -2,13 +2,14 @@
  * Copyright (c) Kuba Szczodrzyński 2020-7-27.
  */
 
-package pl.szczodrzynski.mcstart.standalone
+package pl.szczodrzynski.mcstart
 
 import com.github.mgrzeszczak.jsondsl.Json
-import pl.szczodrzynski.mcstart.Config
-import pl.szczodrzynski.mcstart.standalone.ext.convertFormat
-import pl.szczodrzynski.mcstart.standalone.ext.log
-import pl.szczodrzynski.mcstart.standalone.ext.writeString
+import pl.szczodrzynski.mcstart.config.Config
+import pl.szczodrzynski.mcstart.ext.convertFormat
+import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.ext.writeString
+import pl.szczodrzynski.mcstart.packet.Packet
 import java.net.ServerSocket
 import java.net.Socket
 

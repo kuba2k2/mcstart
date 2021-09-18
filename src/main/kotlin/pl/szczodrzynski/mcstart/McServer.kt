@@ -2,7 +2,7 @@
  * Copyright (c) Kuba Szczodrzyński 2020-7-27.
  */
 
-package pl.szczodrzynski.mcstart.standalone
+package pl.szczodrzynski.mcstart
 
 class McServer(commandLine: String) {
 

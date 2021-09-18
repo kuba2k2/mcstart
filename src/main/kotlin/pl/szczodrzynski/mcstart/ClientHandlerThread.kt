@@ -2,20 +2,18 @@
  * Copyright (c) Kuba Szczodrzyński 2020-7-24.
  */
 
-package pl.szczodrzynski.mcstart.standalone
+package pl.szczodrzynski.mcstart
 
 import kotlinx.coroutines.*
-import pl.szczodrzynski.mcstart.standalone.ext.log
-import pl.szczodrzynski.mcstart.standalone.packet.ServerListHandshake
-import pl.szczodrzynski.mcstart.standalone.packet.ServerListNickname
-import pl.szczodrzynski.mcstart.standalone.packet.ServerListPing
-import pl.szczodrzynski.mcstart.standalone.packet.ServerListRequest
+import pl.szczodrzynski.mcstart.config.StandaloneConfig
+import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.packet.*
 import java.net.Socket
 
 class ClientHandlerThread(
-        val config: StandaloneConfig,
-        val client: Socket,
-        val onPlayerJoin: (client: Socket, nickname: String) -> Unit
+    val config: StandaloneConfig,
+    val client: Socket,
+    val onPlayerJoin: (client: Socket, nickname: String) -> Unit
 ) : CoroutineScope {
 
     override val coroutineContext = Job() + Dispatchers.IO
