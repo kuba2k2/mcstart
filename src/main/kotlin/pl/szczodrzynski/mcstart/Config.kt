@@ -6,7 +6,6 @@ package pl.szczodrzynski.mcstart
 
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
-import pl.szczodrzynski.mcstart.plugin.PluginConfig
 import pl.szczodrzynski.mcstart.standalone.StandaloneConfig
 import java.io.File
 
@@ -34,5 +33,4 @@ class Config {
     }
 
     var standalone = StandaloneConfig()
-    var plugin = PluginConfig()
 }

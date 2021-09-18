@@ -9,7 +9,6 @@ version '0.2.3'
 repositories {
     mavenCentral()
     maven { url 'https://jitpack.io' }
-    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/public/' }
 }
 
 dependencies {
@@ -18,7 +17,6 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation "com.github.mgrzeszczak:json-dsl:v1.1"
     implementation 'org.yaml:snakeyaml:1.29'
-    implementation "org.bukkit:bukkit:1.15.2-R0.1-SNAPSHOT"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
