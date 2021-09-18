@@ -4,7 +4,9 @@
 
 package pl.szczodrzynski.mcstart.packet
 
-import pl.szczodrzynski.mcstart.ext.*
+import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.ext.readNumber
+import pl.szczodrzynski.mcstart.ext.writeNumber
 import java.io.ByteArrayInputStream
 import java.net.Socket
 
@@ -14,7 +16,7 @@ class ServerListPing(
     stream: ByteArrayInputStream = packet.data.inputStream()
 ) {
 
-    val payload = stream.readNumber(8)
+    private val payload = stream.readNumber(8)
 
     init {
         log("ServerListPing(payload = $payload)")

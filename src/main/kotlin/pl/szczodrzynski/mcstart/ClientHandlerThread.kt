@@ -5,15 +5,15 @@
 package pl.szczodrzynski.mcstart
 
 import kotlinx.coroutines.*
-import pl.szczodrzynski.mcstart.config.StandaloneConfig
+import pl.szczodrzynski.mcstart.config.Config
 import pl.szczodrzynski.mcstart.ext.log
 import pl.szczodrzynski.mcstart.packet.*
 import java.net.Socket
 
 class ClientHandlerThread(
-    val config: StandaloneConfig,
-    val client: Socket,
-    val onPlayerJoin: (client: Socket, nickname: String) -> Unit
+    private val config: Config,
+    private val client: Socket,
+    private val onPlayerJoin: (client: Socket, nickname: String) -> Unit
 ) : CoroutineScope {
 
     override val coroutineContext = Job() + Dispatchers.IO

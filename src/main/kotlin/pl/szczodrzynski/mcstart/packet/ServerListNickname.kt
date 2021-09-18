@@ -4,7 +4,8 @@
 
 package pl.szczodrzynski.mcstart.packet
 
-import pl.szczodrzynski.mcstart.ext.*
+import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.ext.readString
 import java.io.ByteArrayInputStream
 import java.net.Socket
 
@@ -15,7 +16,7 @@ class ServerListNickname(
     stream: ByteArrayInputStream = packet.data.inputStream()
 ) {
 
-    val nickname = stream.readString()
+    private val nickname = stream.readString()
 
     init {
         log("ServerListNickname(nickname = $nickname)")
