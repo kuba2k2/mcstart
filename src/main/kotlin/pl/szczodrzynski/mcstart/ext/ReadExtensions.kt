@@ -8,8 +8,8 @@ import java.io.InputStream
 
 fun InputStream.readBytes(num: Int): ByteArray {
     val buf = ByteArray(num)
-    read(buf)
-    return buf
+    val numRead = read(buf)
+    return buf.copyOf(numRead)
 }
 
 fun InputStream.readString(): String {
@@ -25,12 +25,15 @@ fun InputStream.readNumber(length: Int): Long {
     return number
 }
 
-fun InputStream.readVarInt(): Int {
+fun InputStream.readVarInt(firstByte: Int? = null): Int {
     var numRead = 0
     var result = 0
     var read: Int
     do {
-        read = read()
+        read = if (numRead == 0 && firstByte != null)
+            firstByte
+        else
+            read()
         val value: Int = read and 127
         result = result or (value shl 7 * numRead)
         numRead++
