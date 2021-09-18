@@ -6,9 +6,15 @@ package pl.szczodrzynski.mcstart.ext
 
 import java.io.InputStream
 
+fun InputStream.readBytes(num: Int): ByteArray {
+    val buf = ByteArray(num)
+    read(buf)
+    return buf
+}
+
 fun InputStream.readString(): String {
     val length = readVarInt()
-    return String(readNBytes(length))
+    return String(readBytes(length))
 }
 
 fun InputStream.readNumber(length: Int): Long {

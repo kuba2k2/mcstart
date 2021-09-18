@@ -6,6 +6,7 @@
 
 package pl.szczodrzynski.mcstart.packet
 
+import pl.szczodrzynski.mcstart.ext.readBytes
 import pl.szczodrzynski.mcstart.ext.readVarInt
 import pl.szczodrzynski.mcstart.ext.varLength
 import pl.szczodrzynski.mcstart.ext.writeVarInt
@@ -25,7 +26,7 @@ data class Packet(
             return Packet(
                 packetId,
                 length,
-                client.inputStream.readNBytes(length)
+                client.inputStream.readBytes(length)
             )
         }
 
