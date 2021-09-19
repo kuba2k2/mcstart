@@ -4,8 +4,6 @@
 
 package pl.szczodrzynski.mcstart.config
 
-import io.github.cdimascio.dotenv.dotenv
-
 class Config {
     private val envMapping = mapOf(
         "SERVER_PORT" to "server-port",
@@ -15,17 +13,11 @@ class Config {
         "ENABLE_WHITELIST" to "white-list",
     )
 
-    private val dotenv = dotenv {
-        ignoreIfMissing = true
-    }
+    private val dotenv = Dotenv()
 
     val serverPath = dotenv["SERVER_PATH"] ?: "."
 
-    private val properties = dotenv {
-        directory = serverPath
-        filename = "server.properties"
-        ignoreIfMissing = true
-    }
+    private val properties = Dotenv(serverPath, "server.properties")
 
     val serverPort = getInt("SERVER_PORT") ?: 25565
 
