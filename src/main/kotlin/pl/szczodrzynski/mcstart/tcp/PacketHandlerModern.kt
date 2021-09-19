@@ -53,22 +53,24 @@ class PacketHandlerModern(
         // the client wants to login
         // should kick the player already here
         is ModernServerLoginStart -> {
-            val isAllowed = config.whitelist.allows(packet.username)
-
-            var reason = if (isAllowed)
-                config.startingText
-            else
-                config.disconnectText
-            reason = reason.replace("\$USERNAME", packet.username)
-
+            val reason = handleHandshake(packet.username)
             ModernClientDisconnect(reason).write(client)
             client.close()
-            if (isAllowed)
-                onServerClose(packet.username)
-            Unit
         }
-        else -> {
-            log("Unknown packet received: $packet")
-        }
+        else -> log("Unknown packet received: $packet")
+    }
+
+    private fun handleHandshake(username: String): String {
+        val isAllowed = config.whitelist.allows(username)
+
+        var reason = if (isAllowed)
+            config.startingText
+        else
+            config.disconnectText
+        reason = reason.replace("\$USERNAME", username)
+
+        if (isAllowed)
+            onServerClose(username)
+        return reason
     }
 }

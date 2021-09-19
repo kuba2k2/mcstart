@@ -19,6 +19,11 @@ fun InputStream.readString(): String {
     return String(readBytes(length))
 }
 
+fun InputStream.readStringLegacy(): String {
+    val length = readNumber(2).toInt()
+    return readBytes(length * 2).toString(Charsets.UTF_16BE)
+}
+
 fun InputStream.readNumber(length: Int): Long {
     var number: Long = 0
     for (i in 0 until length) {

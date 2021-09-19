@@ -5,7 +5,8 @@
 package pl.szczodrzynski.mcstart.tcp
 
 import pl.szczodrzynski.mcstart.config.Config
-import pl.szczodrzynski.mcstart.packet.Packet
+import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.packet.*
 import java.net.Socket
 
 class PacketHandlerLegacy(
@@ -19,30 +20,53 @@ class PacketHandlerLegacy(
         handlePacket()
     }
 
-    enum class LegacyPacketType {
-        LEGACY_1_6,
-        LEGACY_1_5,
-        LEGACY_1_3,
+    /*
+        Legacy Server List Ping
+            1. C->S: Ping(FE 01 FA ...)     MC 1.6
+            1. C->S: Ping(FE 01)            MC 1.4-1.5
+            1. C->S: Ping(FE)               MC <=1.3
+            2. S->C: Disconnect(glue 00h)   MC 1.4-1.6  implemented as Pong16
+            2. S->C: Disconnect(glue §)     MC <=1.3    implemented as Pong13
+
+        Legacy Login
+            1. C->S: Handshake(protocol, username, host, port)  MC 1.4-1.6
+            1. C->S: Handshake(username;host:port)              MC <=1.3
+            2. S->C: Disconnect(reason)
+     */
+
+    private fun handlePacket() = when (packet) {
+        is LegacyServerPing16, is LegacyServerPing15 -> {
+            LegacyClientPong16.buildUsing(config).write(client)
+            client.close()
+        }
+        is LegacyServerPing13 -> {
+            LegacyClientPong13.buildUsing(config).write(client)
+            client.close()
+        }
+        is LegacyServerHandshake16 -> {
+            val reason = handleHandshake(packet.username)
+            LegacyClientDisconnect(reason).write(client)
+            client.close()
+        }
+        is LegacyServerHandshake13 -> {
+            val reason = handleHandshake(packet.username)
+            LegacyClientDisconnect(reason).write(client)
+            client.close()
+        }
+        else -> log("Unknown packet received: $packet")
     }
 
-    private fun handlePacket() {
-        /*val inputStream = client.inputStream
+    private fun handleHandshake(username: String): String {
+        val isAllowed = config.whitelist.allows(username)
 
-        var type = LEGACY_1_3
+        var reason = if (isAllowed)
+            config.startingText
+        else
+            config.disconnectText
+        reason = reason.replace("\$USERNAME", username)
 
-        try {
-            inputStream.read() // 0x01
-            inputStream.read() // 0xFA
-            type = LEGACY_1_5
-            var length = inputStream.readNumber(2).toInt()
-            inputStream.readBytes(length * 2)
-            length = inputStream.readNumber(2).toInt()
-            inputStream.readBytes(length)
-            type = LEGACY_1_6
-        } catch (e: SocketTimeoutException) {
-            // read timeout, ignore
-        }
-        println("Legacy packet, type $type")*/
-        client.close()
+        if (isAllowed)
+            onServerClose(username)
+        return reason
     }
 }

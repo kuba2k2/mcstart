@@ -60,6 +60,17 @@ object PacketParser {
                 else -> ModernServerRequest()
             }
             0x01 -> ModernServerPing.deserialize(data.inputStream())
+            0x02 -> when {
+                // we're assuming the username and host string
+                // to be shorter than 64 chars (128 bytes)
+                data.first() == 0.toByte() -> LegacyServerHandshake13.deserialize(data.inputStream())
+                else -> LegacyServerHandshake16.deserialize(data.inputStream())
+            }
+            0xFE -> when {
+                data.size == 1 -> LegacyServerPing15()
+                data.isEmpty() -> LegacyServerPing13()
+                else -> LegacyServerPing16.deserialize(data.inputStream())
+            }
             else -> UnknownPacket(packetId, isLegacy, data)
         }
     }

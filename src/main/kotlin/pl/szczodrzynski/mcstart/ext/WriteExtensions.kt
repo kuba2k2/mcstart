@@ -6,9 +6,20 @@ package pl.szczodrzynski.mcstart.ext
 
 import java.io.OutputStream
 
+fun MutableList<Byte>.writeBytes(vararg bytes: Int) {
+    addAll(bytes.map { it.toByte() })
+}
+
 fun MutableList<Byte>.writeString(string: String) {
     writeVarInt(string.toByteArray().size)
     string.toByteArray().forEach {
+        add(it)
+    }
+}
+
+fun MutableList<Byte>.writeStringLegacy(string: String) {
+    writeNumber(2, string.length.toLong())
+    string.toByteArray(Charsets.UTF_16BE).forEach {
         add(it)
     }
 }
