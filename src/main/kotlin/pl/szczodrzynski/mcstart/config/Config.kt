@@ -61,6 +61,8 @@ class Config {
         ?: whitelistEnabled
     val whitelistFile = getString("MCS_WHITELIST_FILE")
 
+    val whitelist = Whitelist(this)
+
     private fun getString(name: String): String? {
         val property = envMapping[name]
         val value = if (property != null)

@@ -8,8 +8,10 @@ import java.io.InputStream
 
 fun InputStream.readBytes(num: Int): ByteArray {
     val buf = ByteArray(num)
-    val numRead = read(buf)
-    return buf.copyOf(numRead)
+    for (i in 0 until num) {
+        buf[i] = read().toByte()
+    }
+    return buf
 }
 
 fun InputStream.readString(): String {

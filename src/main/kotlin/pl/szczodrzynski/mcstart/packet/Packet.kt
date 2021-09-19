@@ -6,62 +6,36 @@
 
 package pl.szczodrzynski.mcstart.packet
 
-import pl.szczodrzynski.mcstart.ext.readBytes
-import pl.szczodrzynski.mcstart.ext.readVarInt
+import pl.szczodrzynski.mcstart.ext.log
 import pl.szczodrzynski.mcstart.ext.varLength
 import pl.szczodrzynski.mcstart.ext.writeVarInt
 import java.io.OutputStream
 import java.net.Socket
 
-data class Packet(
+abstract class Packet(
     val packetId: Int,
-    val length: Int,
-    val data: ByteArray
+    val isLegacy: Boolean,
 ) {
-    companion object {
-        fun readFromSocket(client: Socket): Packet {
-            var length = client.inputStream.readVarInt()
-            val packetId = client.inputStream.readVarInt()
-            length -= varLength(packetId)
-            return Packet(
-                packetId,
-                length,
-                client.inputStream.readBytes(length)
-            )
-        }
 
-        fun withData(packetId: Int, data: List<Byte>): Packet {
-            return Packet(
-                packetId,
-                data.size,
-                data.toByteArray()
-            )
-        }
-    }
+    abstract fun serialize(): ByteArray
 
-    fun write(outputStream: OutputStream) {
-        outputStream.writeVarInt(varLength(packetId) + length)
+    fun write(client: Socket) = write(client.outputStream)
+
+    private fun write(outputStream: OutputStream) {
+        log("--> $this")
+        if (isLegacy) {
+            writeLegacy(outputStream)
+            return
+        }
+        val data = serialize()
+        outputStream.writeVarInt(varLength(packetId) + data.size)
         outputStream.writeVarInt(packetId)
         outputStream.write(data)
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Packet
-
-        if (packetId != other.packetId) return false
-        if (length != other.length) return false
-        if (!data.contentEquals(other.data)) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = packetId
-        result = 31 * result + length
-        result = 31 * result + data.contentHashCode()
-        return result
+    private fun writeLegacy(outputStream: OutputStream) {
+        val data = serialize()
+        outputStream.write(packetId)
+        outputStream.write(data)
     }
 }

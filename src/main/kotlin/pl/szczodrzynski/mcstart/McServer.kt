@@ -6,6 +6,7 @@ package pl.szczodrzynski.mcstart
 
 import kotlinx.coroutines.*
 import pl.szczodrzynski.mcstart.config.Config
+import pl.szczodrzynski.mcstart.ext.log
 
 class McServer(
     private val config: Config,
@@ -19,7 +20,8 @@ class McServer(
     private var scannerJob: Job? = null
 
     init {
-        println("----\nRunning MC Server command line: ${args.joinToString(" ")}\n")
+        println("----")
+        log("Running MC Server command line: ${args.joinToString(" ")}\n")
 
         val process = ProcessBuilder(*args)
             .redirectInput(ProcessBuilder.Redirect.PIPE)

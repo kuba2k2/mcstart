@@ -37,3 +37,5 @@ fun CoroutineScope.startCoroutineTimer(delayMillis: Long = 0, repeatMillis: Long
         action()
     }
 }
+
+fun ByteArray.toHex() = joinToString(" ") { "%02x".format(it) }
