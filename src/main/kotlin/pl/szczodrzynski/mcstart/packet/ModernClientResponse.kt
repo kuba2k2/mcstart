@@ -27,12 +27,15 @@ class ModernClientResponse(
                     .asJsonObject,
             )
 
-        fun buildUsing(config: Config) =
+        fun buildUsing(config: Config, protocol: Int? = null) =
             ModernClientResponse(
                 data = Json.obj {
                     "version" to obj {
                         "name" to config.versionName.convertFormat()
-                        "protocol" to config.versionProtocol
+                        "protocol" to if (config.matchProtocolModern)
+                            protocol ?: config.versionProtocol
+                        else
+                            config.versionProtocol
                     }
                     "players" to obj {
                         "max" to config.playersMax

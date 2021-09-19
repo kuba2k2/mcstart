@@ -33,9 +33,12 @@ class LegacyClientPong16(
             )
         }
 
-        fun buildUsing(config: Config) =
+        fun buildUsing(config: Config, protocol: Int? = null) =
             LegacyClientPong16(
-                protocolVersion = config.versionProtocol,
+                protocolVersion = if (config.matchProtocolLegacy)
+                    protocol ?: config.versionProtocol
+                else
+                    config.versionProtocol,
                 versionName = config.versionName.convertFormat(),
                 motdText = config.motdText.convertFormat(),
                 playersOnline = config.playersOnline,

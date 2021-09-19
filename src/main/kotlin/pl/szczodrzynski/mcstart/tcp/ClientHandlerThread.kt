@@ -18,6 +18,8 @@ class ClientHandlerThread(
     override val coroutineContext = Job() + Dispatchers.IO
 
     private var clientIsLegacy = false
+    // the client's protocol version sent in Handshake
+    var modernProtocolVersion = 0
 
     init {
         launch(Dispatchers.IO) {
@@ -52,7 +54,7 @@ class ClientHandlerThread(
             PacketHandlerLegacy(config, client, packet, onServerClose)
         }
         else {
-            PacketHandlerModern(config, client, packet, onServerClose)
+            PacketHandlerModern(config, client, this, packet, onServerClose)
         }
     }
 }

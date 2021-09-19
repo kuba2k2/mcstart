@@ -35,11 +35,18 @@ class PacketHandlerLegacy(
      */
 
     private fun handlePacket() = when (packet) {
-        is LegacyServerPing16, is LegacyServerPing15 -> {
-            LegacyClientPong16.buildUsing(config).write(client)
+        is LegacyServerPing16 -> {
+            // use client's protocol version for matchProtocol
+            LegacyClientPong16.buildUsing(config, packet.protocolVersion).write(client)
+            client.close()
+        }
+        is LegacyServerPing15 -> {
+            // use protocol 60 (1.5) for matchProtocol
+            LegacyClientPong16.buildUsing(config, 60).write(client)
             client.close()
         }
         is LegacyServerPing13 -> {
+            // no protocol version in the response
             LegacyClientPong13.buildUsing(config).write(client)
             client.close()
         }

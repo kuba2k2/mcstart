@@ -12,6 +12,7 @@ import java.net.Socket
 class PacketHandlerModern(
     private val config: Config,
     private val client: Socket,
+    private val handler: ClientHandlerThread,
     private val packet: Packet,
     private val onServerClose: (username: String) -> Unit
 ) {
@@ -39,11 +40,13 @@ class PacketHandlerModern(
     private fun handlePacket() = when (packet) {
         // a normal handshake packet (containing 0x01 or 0x02 as the "next state")
         is ModernServerHandshake -> {
-            // do nothing
+            // save client's protocol version for later
+            handler.modernProtocolVersion = packet.protocolVersion
         }
         // the client requests the server info
         is ModernServerRequest -> {
-            ModernClientResponse.buildUsing(config).write(client)
+            // use client's protocol version for matchProtocol
+            ModernClientResponse.buildUsing(config, handler.modernProtocolVersion).write(client)
         }
         // just a ping
         is ModernServerPing -> {

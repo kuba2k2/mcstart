@@ -30,6 +30,8 @@ class Config {
     val serverPort = getInt("SERVER_PORT") ?: 25565
 
     val socketTimeout = getLong("MCS_SOCKET_TIMEOUT") ?: 5000L
+    val matchProtocolModern = getBoolean("MCS_MATCH_PROTOCOL_MODERN") ?: false
+    val matchProtocolLegacy = getBoolean("MCS_MATCH_PROTOCOL_LEGACY") ?: true
     val versionProtocol = getInt("MCS_VERSION_PROTOCOL") ?: 1
     val versionName = getString("MCS_VERSION_NAME") ?: "Stopped"
 
