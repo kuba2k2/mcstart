@@ -15,6 +15,10 @@ fun main(args: Array<String>) {
     println("Loaded whitelist: ${config.whitelist}")
     println("Server command line: ${args.joinToString(" ")}")
 
+    if (args.isEmpty()) {
+        throw IllegalArgumentException("Server command line is missing")
+    }
+
     // wait for MC server to exit gracefully on SIGTERM
     Runtime.getRuntime().addShutdownHook(object : Thread() {
         override fun run() {
