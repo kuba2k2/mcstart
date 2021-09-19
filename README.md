@@ -1,37 +1,70 @@
 # MCStart
 Automatically start a Minecraft server whenever a whitelisted player tries to join.
 
-[Download v0.2.3](https://github.com/kuba2k2/MCStart/releases/tag/v0.2.3)
+[Download v1.0.0](https://github.com/kuba2k2/MCStart/releases/tag/v1.0.0)
 
-## Config
+## Configuration
 
-```yaml
-plugin:
-  autoStopEnabled: true # whether to stop the server if all players left
-  autoStopTimeout: 300 # 5 minutes
-  startTimeout: true # whether to start the autoStopTimeout on server start
-  startTimeoutDelay: 60 # delay the timeout on server start
-standalone:
-  serverPort: 25565 # should be equal to the server port
-  socketTimeout: 5000 # timeout for client connections (recommended)
+Refer to `.env.example` for configuration options:
+```dotenv
+# - all of the configuration values are optional
+# - the defaults are specified below
+# - fields marked with ! are read from server.properties, if available
+#   (the value in .env is then ignored)
+# - fields marked with ? are read from server.properties, only
+#   if not specified in .env
 
-  protocolVersion: 1 # if equal to your MC client version, it will show player count (below)
-  versionName: "Stopped" # if protocol version differs from the client, this text will be shown
-  playersOnline: 0
-  playersMax: 0
+# server directory path (used for reading server.properties and whitelist files)
+SERVER_PATH=.
+# ! server port - needs to be equal to the actual server port
+SERVER_PORT=25565
 
-  motd: "The server is stopped, join to start."
-  startingText: "Hi $USERNAME, the server is starting..."
-  disconnectText: "You are not whitelisted to start this server."
+# timeout for client connections, in ms (recommended)
+MCS_SOCKET_TIMEOUT=5000
+# enable matching protocol version for modern clients
+MCS_MATCH_PROTOCOL_MODERN=false
+# enable matching protocol version for legacy clients
+MCS_MATCH_PROTOCOL_LEGACY=true
+# default protocol version - clients will show player count
+MCS_VERSION_PROTOCOL=1
+# version name - shown on clients with incompatible protocol version
+MCS_VERSION_NAME=Stopped
 
-  whitelistEnabled: true # allow only certain players to start the server
-  whitelistUseServer: false # whether to use the server whitelist (plugins/../whitelist.json)
-  whitelist:
-   - Steve
-   - Alex 
+# query the server periodically and shut it down when empty
+MCS_AUTO_STOP=false
+# the hostname/IP address of the server to query (most likely localhost)
+MCS_AUTO_STOP_HOSTNAME=localhost
+# delay to begin querying after server starts, in seconds
+MCS_AUTO_STOP_POLLING_DELAY=60
+# how often to query the server, in seconds
+MCS_AUTO_STOP_POLLING_INTERVAL=10
+# how long does the server have to be empty to shut it down, in seconds
+MCS_AUTO_STOP_TIMEOUT=600
+# the command used to shut the server down
+MCS_AUTO_STOP_COMMAND=stop
+
+# online player count - when protocol version matches
+MCS_PLAYERS_ONLINE=0
+# ? max player count - when protocol version matches
+MCS_PLAYERS_MAX=0
+
+# ? Message of The Day - when MCStart is running
+MCS_MSG_MOTD="The server is stopped, join to start."
+# the message sent to the player starting the server
+MCS_MSG_STARTING="Hi $USERNAME, the server is starting..."
+# the message sent to players not whitelisted to start the server
+MCS_MSG_NOT_WHITELISTED="You are not whitelisted to start this server."
+
+# ? whether the server start whitelist is enabled
+MCS_WHITELIST=false
+# ? whether to use the server's whitelist
+MCS_WHITELIST_SERVER=true
+# file containing the whitelist entries (JSON or TXT)
+MCS_WHITELIST_FILE=whitelist.txt
 ```
 You can use color codes (`&`) in all string properties.
-The `$USERNAME` placeholder is available in `startingText` and `disconnectText`.
+
+The `$USERNAME` placeholder is available in `MCS_MSG_STARTING` and `MCS_MSG_NOT_WHITELISTED`.
 
 ## Usage
 
