@@ -36,7 +36,7 @@ object PacketParser {
         var i = 0
         val buf = ByteArray(1024)
         try {
-            while (true) {
+            while (i < 1024) {
                 buf[i] = inputStream.read().toByte()
                 i++ // not as buf[i++] not to increment on an exception
             }
@@ -51,25 +51,33 @@ object PacketParser {
     }
 
     private fun buildPacket(packetId: Int, isLegacy: Boolean, data: ByteArray): Packet {
+        val input = data.inputStream()
         return when (packetId) {
             0x00 -> when {
                 data.size > 1 -> when {
-                    data.last() <= 0x02 -> ModernServerHandshake.deserialize(data.inputStream())
-                    else -> ModernServerLoginStart.deserialize(data.inputStream())
+                    data.first() == '{'.code.toByte()
+                            && data.last() == '}'.code.toByte() -> ModernClientResponse.deserialize(input)
+                    data.last() <= 0x02 -> ModernServerHandshake.deserialize(input)
+                    else -> ModernServerLoginStart.deserialize(input)
                 }
                 else -> ModernServerRequest()
             }
-            0x01 -> ModernServerPing.deserialize(data.inputStream())
+            0x01 -> ModernServerPing.deserialize(input)
             0x02 -> when {
                 // we're assuming the username and host string
                 // to be shorter than 64 chars (128 bytes)
-                data.first() == 0.toByte() -> LegacyServerHandshake13.deserialize(data.inputStream())
-                else -> LegacyServerHandshake16.deserialize(data.inputStream())
+                data.first() == 0.toByte() -> LegacyServerHandshake13.deserialize(input)
+                else -> LegacyServerHandshake16.deserialize(input)
             }
             0xFE -> when {
                 data.size == 1 -> LegacyServerPing15()
                 data.isEmpty() -> LegacyServerPing13()
-                else -> LegacyServerPing16.deserialize(data.inputStream())
+                else -> LegacyServerPing16.deserialize(input)
+            }
+            0xFF -> when {
+                data.copyOfRange(2, 6).toString(Charsets.UTF_16BE) == "§1" -> LegacyClientPong16.deserialize(input)
+                data.contains('§'.code.toByte()) -> LegacyClientPong13.deserialize(input)
+                else -> LegacyClientDisconnect.deserialize(input)
             }
             else -> UnknownPacket(packetId, isLegacy, data)
         }

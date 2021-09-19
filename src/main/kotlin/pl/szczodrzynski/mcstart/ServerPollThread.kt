@@ -9,7 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import pl.szczodrzynski.mcstart.config.Config
-import pl.szczodrzynski.mcstart.ext.*
+import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.ext.startCoroutineTimer
+import pl.szczodrzynski.mcstart.packet.LegacyClientPong13
+import pl.szczodrzynski.mcstart.packet.LegacyClientPong16
+import pl.szczodrzynski.mcstart.packet.LegacyServerPing13
+import pl.szczodrzynski.mcstart.packet.ModernClientResponse
+import pl.szczodrzynski.mcstart.tcp.PacketParser
 import java.net.Socket
 
 class ServerPollThread(
@@ -21,7 +27,7 @@ class ServerPollThread(
     private var timerJob: Job? = null
     private var shutdownJob: Job? = null
 
-    private val packet = byteArrayOf(0xFE.b)
+    private val packet = LegacyServerPing13()
 
     init {
         scheduleTimer()
@@ -61,25 +67,25 @@ class ServerPollThread(
         try {
             val socket = Socket(config.autoStopServer, config.serverPort)
 
-            socket.outputStream.write(packet)
+            packet.write(socket)
 
             while (socket.isConnected && !socket.isClosed && !socket.isInputShutdown) {
                 val inputStream = socket.inputStream
                 if (inputStream.available() > 0) {
-                    val id = inputStream.readNumber(1).toInt()
-                    val length = inputStream.readNumber(2).toInt()
-                    val data = inputStream.readBytes(length * 2)
-                    val dataString = String(data, Charsets.UTF_16BE)
-                    val items = dataString
-                        .reversed()
-                        .split('§')
-                        .map { it.reversed() }
-                    val maxPlayers = items[0].toIntOrNull()
-                    val currentPlayers = items[1].toIntOrNull()
-
-                    socket.close()
-                    if (currentPlayers == 0)
-                        return true
+                    val response = PacketParser.readLegacy(inputStream)
+                    log("<-- $response")
+                    val currentPlayers = when (response) {
+                        is ModernClientResponse -> response.data
+                            .get("players")
+                            .asJsonObject
+                            .get("online")
+                            .asInt
+                        is LegacyClientPong16 -> response.playersOnline
+                        is LegacyClientPong13 -> response.playersOnline
+                        // do not stop server on an error
+                        else -> 1
+                    }
+                    return currentPlayers == 0
                 }
             }
         } catch (e: Exception) {
