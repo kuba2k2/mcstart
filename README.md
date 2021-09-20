@@ -1,7 +1,7 @@
 # MCStart
 Automatically start a Minecraft server whenever a whitelisted player tries to join.
 
-[Download v1.0.2](https://github.com/kuba2k2/MCStart/releases/tag/v1.0.2)
+[Download v1.0.2](https://github.com/kuba2k2/mcstart/releases/tag/v1.0.2)
 
 ## Usage
 
@@ -11,9 +11,43 @@ The legacy simple command guide is attached at the end of this README.
 
 ### With Docker Compose
 
+The MCStart Docker image is based on [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/), making most its options available.
+
+- Create an `mcstart.env` file with your configuration options of choice. You can use the [sample file `.env.example`](https://raw.githubusercontent.com/kuba2k2/mcstart/master/.env.example).
+- Configure the file according to **Configuration** section below.
+- Create a `docker-compose.yml`, like the attached sample.
+- Choose a Java version (`mcstart:java8` or `mcstart:java16`)
+- Set the desired options for [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/), as described in their [README](https://github.com/itzg/docker-minecraft-server/blob/master/README.md). You can use the `environment:` section or another `.env` file.
+- Run `docker-compose up` to start the container and watch its output
+
+```yml
+version: "3.9"
+services:
+  mc1:
+    env_file:
+      # configure all MCStart settings in this env file
+      - mcstart.env
+    environment:
+      # configure all itzg/minecraft-server settings
+      - EULA=TRUE
+      - TYPE=VANILLA
+      - VERSION=1.7.2
+    # choose either java8 or java16, depending on your Minecraft version
+    image: mcstart:java8
+    # set the external server port (do not change the second number)
+    ports:
+      - 25565:25565
+    tty: true
+    stdin_open: true
+    # restart the container on reboots
+    restart: unless-stopped
+    # attach a named volume with the server's data
+    volumes:
+     - mc1:/data
+volumes:
+  mc1: {}
 ```
-TODO
-```
+(this sample file is available [here](https://raw.githubusercontent.com/kuba2k2/mcstart/master/docker-compose.yml))
 
 ## Configuration
 

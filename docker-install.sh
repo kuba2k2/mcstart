@@ -1,5 +1,5 @@
 #!/bin/bash
 
-wget https://github.com/kuba2k2/MCStart/releases/download/v1.0.2/mcstart-1.0.2.jar -O /mcstart.jar
+wget https://github.com/kuba2k2/mcstart/releases/download/v1.0.2/mcstart-1.0.2.jar -O /mcstart.jar
 sed -i 's/exec /mcstart /g' /start-finalExec
 echo "function mcstart(){ java -jar /mcstart.jar \$* ; }" >> /start-utils

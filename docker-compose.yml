@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  mc1:
+    env_file:
+      # configure all MCStart settings in this env file
+      - mcstart.env
+    environment:
+      # configure all itzg/minecraft-server settings
+      - EULA=TRUE
+      - TYPE=VANILLA
+      - VERSION=1.7.2
+    # choose either java8 or java16, depending on your Minecraft version
+    image: mcstart:java8
+    # set the external server port (do not change the second number)
+    ports:
+      - 25565:25565
+    tty: true
+    stdin_open: true
+    # restart the container on reboots
+    restart: unless-stopped
+    # attach a named volume with the server's data
+    volumes:
+     - mc1:/data
+volumes:
+  mc1: {}
