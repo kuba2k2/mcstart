@@ -16,7 +16,7 @@ The MCStart Docker image is based on [itzg/minecraft-server](https://hub.docker.
 - Create an `mcstart.env` file with your configuration options of choice. You can use the [sample file `.env.example`](https://raw.githubusercontent.com/kuba2k2/mcstart/master/.env.example).
 - Configure the file according to **Configuration** section below.
 - Create a `docker-compose.yml`, like the attached sample.
-- Choose a Java version (`mcstart:java8` or `mcstart:java16`)
+- Choose a Java version (`mcstart:latest-java8` or `mcstart:latest-java16`)
 - Set the desired options for [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/), as described in their [README](https://github.com/itzg/docker-minecraft-server/blob/master/README.md). You can use the `environment:` section or another `.env` file.
 - Run `docker-compose up` to start the container and watch its output
 
@@ -33,7 +33,7 @@ services:
       - TYPE=VANILLA
       - VERSION=1.7.2
     # choose either java8 or java16, depending on your Minecraft version
-    image: mcstart:java8
+    image: kuba2k2/mcstart:latest-java8
     # set the external server port (do not change the second number)
     ports:
       - 25565:25565

@@ -52,7 +52,9 @@ jobs:
           push: true
           build-args: |
             TAG=${{ matrix.tag }}
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/mcstart:${{ steps.version.outputs.version }}-${{ matrix.tag }}
+          tags: |
+            ${{ secrets.DOCKER_HUB_USERNAME }}/mcstart:${{ steps.version.outputs.version }}-${{ matrix.tag }}
+            ${{ secrets.DOCKER_HUB_USERNAME }}/mcstart:latest-${{ matrix.tag }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 

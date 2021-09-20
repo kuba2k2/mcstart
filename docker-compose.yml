@@ -10,7 +10,7 @@ services:
       - TYPE=VANILLA
       - VERSION=1.7.2
     # choose either java8 or java16, depending on your Minecraft version
-    image: mcstart:java8
+    image: kuba2k2/mcstart:latest-java8
     # set the external server port (do not change the second number)
     ports:
       - 25565:25565
