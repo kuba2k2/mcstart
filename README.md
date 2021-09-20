@@ -3,88 +3,90 @@ Automatically start a Minecraft server whenever a whitelisted player tries to jo
 
 [Download v1.0.2](https://github.com/kuba2k2/MCStart/releases/tag/v1.0.2)
 
+## Usage
+
+The project is now best suited for usage with Docker (or Docker Compose). An example is provided below.
+
+The legacy simple command guide is attached at the end of this README.
+
+### With Docker Compose
+
+```
+TODO
+```
+
 ## Configuration
 
-Refer to `.env.example` for configuration options:
-```dotenv
-# - all of the configuration values are optional
-# - the defaults are specified below
-# - fields marked with ! are read from server.properties, if available
-#   (the value in .env is then ignored)
-# - fields marked with ? are read from server.properties, only
-#   if not specified in .env
+Starting with v1.0.0, the configuration is done using environment variables.
+The program reads `.env` and `server.properties` files automatically,
+making it unnecessary to configure anything to use the program in the most basic mode. All values configurable in `.env` may be specified as environment variables. Such values are then ignored in `.env`.
 
-# server directory path (used for reading server.properties and whitelist files)
-SERVER_PATH=.
-# ! server port - needs to be equal to the actual server port
-SERVER_PORT=25565
+The defaults (and a ready-to-use template) are provided in `.env.example`, which needs to be copied, renamed accordingly and edited.
 
-# timeout for client connections, in ms (recommended)
-MCS_SOCKET_TIMEOUT=5000
-# enable matching protocol version for modern clients
-MCS_MATCH_PROTOCOL_MODERN=false
-# enable matching protocol version for legacy clients
-MCS_MATCH_PROTOCOL_LEGACY=true
-# default protocol version - clients will show player count
-MCS_VERSION_PROTOCOL=1
-# version name - shown on clients with incompatible protocol version
-MCS_VERSION_NAME=Stopped
+Some values (like server port) are read from `server.properties` (if found) instead of `.env`. These are marked with `!`.
+Some values are read from `server.properties` only if not provided in `.env`.
 
-# query the server periodically and shut it down when empty
-MCS_AUTO_STOP=false
-# the hostname/IP address of the server to query (most likely localhost)
-MCS_AUTO_STOP_HOSTNAME=localhost
-# delay to begin querying after server starts, in seconds
-MCS_AUTO_STOP_POLLING_DELAY=60
-# how often to query the server, in seconds
-MCS_AUTO_STOP_POLLING_INTERVAL=10
-# how long does the server have to be empty to shut it down, in seconds
-MCS_AUTO_STOP_TIMEOUT=600
-# the command used to shut the server down
-MCS_AUTO_STOP_COMMAND=stop
-
-# online player count - when protocol version matches
-MCS_PLAYERS_ONLINE=0
-# ? max player count - when protocol version matches
-MCS_PLAYERS_MAX=0
-
-# ? Message of The Day - when MCStart is running
-MCS_MSG_MOTD="The server is stopped, join to start."
-# the message sent to the player starting the server
-MCS_MSG_STARTING="Hi $USERNAME, the server is starting..."
-# the message sent to players not whitelisted to start the server
-MCS_MSG_NOT_WHITELISTED="You are not whitelisted to start this server."
-
-# ? whether the server start whitelist is enabled
-MCS_WHITELIST=false
-# ? whether to use the server's whitelist
-MCS_WHITELIST_SERVER=true
-# file containing the whitelist entries (JSON or TXT)
-MCS_WHITELIST_FILE=whitelist.txt
-```
-You can use color codes (`&`) in all string properties.
+You can use color codes (`&`) in all string properties (well, except hostnames).
 
 The `$USERNAME` placeholder is available in `MCS_MSG_STARTING` and `MCS_MSG_NOT_WHITELISTED`.
 
-## Usage
+### Auto Stop
 
-Put the .jar in `plugins` directory of your server (in order to use the server whitelist and auto stop functionality).
+MCStart can automatically stop the server if no players are online, to save resources. It works by querying the server status periodically and running the `MCS_AUTO_STOP_COMMAND` (`stop` by default) after a configurable timeout. The feature works on all servers supporting the legacy Server List Ping protocol (tested on vanilla 1.2.5, 1.6.4, 1.7.2, 1.17.1, but should work on all versions).
 
-If used with a Bukkit/Spigot server, it will automatically shut down 
-when no players are online (after a configurable timeout). MCStart will
-be running a fake server again, waiting for a player to start the real server.
+- `MCS_AUTO_STOP_POLLING_DELAY` - used to start querying the server after a delay from the time it's started by a joining player
+- `MCS_AUTO_STOP_POLLING_INTERVAL` - how often to query the server
+- `MCS_AUTO_STOP_TIMEOUT` - how long to wait after last player leaves
 
-This behavior may be configured or disabled in the `plugin` section of the config.
+### Protocol Matching
+
+When a server is incompatible with the Minecraft client's version, the GUI shows a red version name text in the multiplayer screen. This is used by MCStart to present an informational string, such as "Server Stopped".
+
+The string (`MCS_VERSION_NAME`) is shown only if the server's protocol version (`MCS_VERSION_PROTOCOL`) mismatches the client's one. It's set to `1` by default to occur to all clients.
+
+Minecraft 1.3.x and older have no information about the server's protocol version, so the version name is not used at all.
+
+However, Minecraft 1.4-1.6 won't allow a player to connect if the version is incompatible. This makes him unable to start the server. A feature, enabled by default with `MCS_MATCH_PROTOCOL_LEGACY`, is provided to allow older clients to start the server. This allows version 1.6.x and 1.5.2 clients to start the server (MC 1.4-1.5.x do not send the version during SLP).
+
+`MCS_MATCH_PROTOCOL_MODERN` can be used to always send a matching version to 1.7+ clients. Thus, the version name is never shown. It's disabled by default.
+
+The recommended settings, suitable for most use cases, depending on the actual server version:
+```properties
+# MC 1.7+
+MCS_MATCH_PROTOCOL_MODERN=false
+MCS_VERSION_PROTOCOL=1
+MCS_VERSION_NAME=Stopped
+# MC 1.6
+MCS_MATCH_PROTOCOL_LEGACY=true
+# MC 1.4-1.5
+MCS_MATCH_PROTOCOL_LEGACY=true
+MCS_VERSION_PROTOCOL=1 # set this to the correct protocol version
+# MC 1.3 and older
+# settings don't matter here
+```
+
+### Whitelist
+
+You can enable (`MCS_WHITELIST`) a whitelist of players allowed to start the server.
+The whitelist is enabled by default IF the server's whitelist is also enabled.
+
+MCStart uses the server's whitelist, by default (`MCS_WHITELIST_SERVER`), and uses `whitelist.json` or `white-list.txt` files (to maintain compatibility with old versions).
+
+You can supply a custom `whitelist.txt` file (`MCS_WHITELIST_FILE`) with a format of one nickname per line. The `MCS_WHITELIST_SERVER` has to be disabled then.
+
+## Usage (legacy)
+
+First, copy the `.env.example` as `.env`. Open the file and configure it, according to **Configuration** above. Put the file in your server directory.
 
 ### As a command
 The working directory is your server directory.
 
-`java -jar plugins/mcstart.jar <cmdline>`
-- `cmdline` - a command to run when the server should start, e.g.
+`java -jar mcstart.jar <cmdline>`
+- `cmdline` - a command to run when the server should start
 
 Examples:
-- `java -jar plugins/mcstart.jar ./start-minecraft.sh`
-- `java -jar plugins/mcstart.jar java -jar -Xmx1G -Xms1G spigot.jar`
+- `java -jar mcstart.jar ./start-minecraft.sh`
+- `java -jar mcstart.jar java -jar -Xmx1G -Xms1G spigot.jar`
 
 ### As a systemd service (example)
 `/etc/systemd/system/minecraft-mcstart.service`
