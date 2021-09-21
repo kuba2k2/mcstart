@@ -55,8 +55,6 @@ class ServerPollThread(
     }
 
     private fun scheduleShutdown() {
-        timerJob?.cancel()
-        timerJob = null
         shutdownJob = startCoroutineTimer(
             delayMillis = config.autoStopTimeout * 1000L
         ) {
@@ -67,6 +65,8 @@ class ServerPollThread(
             }
 
             log("Shutting down the server.")
+            timerJob?.cancel()
+            timerJob = null
             serverStop()
             cancel()
         }
