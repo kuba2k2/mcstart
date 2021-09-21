@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import pl.szczodrzynski.mcstart.config.Config
+import pl.szczodrzynski.mcstart.ext.debug
 import pl.szczodrzynski.mcstart.ext.log
 import pl.szczodrzynski.mcstart.ext.startCoroutineTimer
 import pl.szczodrzynski.mcstart.packet.LegacyClientPong13
@@ -41,14 +42,14 @@ class ServerPollThread(
             delayMillis = config.autoStopPollingDelay * 1000L,
             repeatMillis = config.autoStopPollingInterval * 1000L
         ) {
-            log("Checking server status")
+            debug("Checking server status")
             if (!isServerEmpty()) {
                 shutdownJob?.cancel()
                 shutdownJob = null
                 return@startCoroutineTimer
             }
 
-            log("Server empty, scheduling shutdown in ${config.autoStopTimeout} seconds")
+            debug("Server empty, scheduling shutdown in ${config.autoStopTimeout} seconds")
             scheduleShutdown()
         }
     }
@@ -73,7 +74,7 @@ class ServerPollThread(
                 val inputStream = socket.inputStream
                 if (inputStream.available() > 0) {
                     val response = PacketParser.readLegacy(inputStream)
-                    log("<-- $response")
+                    debug("<-- $response")
                     val currentPlayers = when (response) {
                         is ModernClientResponse -> response.data
                             .get("players")
@@ -89,14 +90,14 @@ class ServerPollThread(
                 }
             }
         } catch (e: Exception) {
-            log("Status check failed: $e")
+            debug("Status check failed: $e")
         }
         return false
     }
 
     private fun shutdown() {
         if (!isServerEmpty()) {
-            log("Shutdown called but server not empty, aborting.")
+            debug("Shutdown called but server not empty, aborting.")
             scheduleTimer()
             return
         }

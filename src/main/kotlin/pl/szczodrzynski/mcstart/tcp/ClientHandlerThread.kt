@@ -6,7 +6,7 @@ package pl.szczodrzynski.mcstart.tcp
 
 import kotlinx.coroutines.*
 import pl.szczodrzynski.mcstart.config.Config
-import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.ext.debug
 import java.net.Socket
 
 class ClientHandlerThread(
@@ -25,7 +25,7 @@ class ClientHandlerThread(
         launch(Dispatchers.IO) {
             withTimeout(config.socketTimeout) {
 
-                log("Socket opened - ${client.inetAddress.hostAddress}.")
+                debug("Socket opened - ${client.inetAddress.hostAddress}.")
 
                 while (isActive && client.isConnected && !client.isClosed && !client.isInputShutdown) {
                     if (client.inputStream.available() > 0) {
@@ -33,7 +33,7 @@ class ClientHandlerThread(
                     }
                 }
             }
-            log("Socket closed.")
+            debug("Socket closed.")
             client.close()
             cancel()
         }
@@ -47,7 +47,7 @@ class ClientHandlerThread(
         else
             PacketParser.read(client.inputStream)
 
-        log("<-- $packet")
+        debug("<-- $packet")
 
         if (packet.isLegacy) {
             clientIsLegacy = true

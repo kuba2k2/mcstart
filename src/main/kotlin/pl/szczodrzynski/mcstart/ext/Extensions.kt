@@ -8,9 +8,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+var DEBUG = false
+
 fun log(msg: String) {
     println("[${Thread.currentThread().name}] $msg")
 }
+
+fun debug(msg: String) = if (DEBUG) log(msg) else Unit
 
 fun varLength(number: Int): Int {
     var numWritten = 0

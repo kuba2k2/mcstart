@@ -6,7 +6,7 @@
 
 package pl.szczodrzynski.mcstart.packet
 
-import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.ext.debug
 import pl.szczodrzynski.mcstart.ext.varLength
 import pl.szczodrzynski.mcstart.ext.writeVarInt
 import java.io.OutputStream
@@ -22,7 +22,7 @@ abstract class Packet(
     fun write(client: Socket) = write(client.outputStream)
 
     private fun write(outputStream: OutputStream) {
-        log("--> $this")
+        debug("--> $this")
         if (isLegacy) {
             writeLegacy(outputStream)
             return

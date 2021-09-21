@@ -5,15 +5,20 @@
 package pl.szczodrzynski.mcstart
 
 import pl.szczodrzynski.mcstart.config.Config
+import pl.szczodrzynski.mcstart.ext.DEBUG
+import pl.szczodrzynski.mcstart.ext.log
 import pl.szczodrzynski.mcstart.tcp.TcpServer
 
 fun main(args: Array<String>) {
 
     println("MCStart version $Version")
     val config = Config()
-    println("Loaded configuration: $config")
-    println("Loaded whitelist: ${config.whitelist}")
-    println("Server command line: ${args.joinToString(" ")}")
+    if (config.debug) {
+        DEBUG = true
+        println("Loaded configuration: $config")
+        println("Loaded whitelist: ${config.whitelist}")
+        println("Server command line: ${args.joinToString(" ")}")
+    }
 
     if (args.isEmpty()) {
         throw IllegalArgumentException("Server command line is missing")
@@ -22,7 +27,9 @@ fun main(args: Array<String>) {
     // wait for MC server to exit gracefully on SIGTERM
     Runtime.getRuntime().addShutdownHook(object : Thread() {
         override fun run() {
+            log("Shutdown hook called")
             McServer.process?.waitFor()
+            log("Process finished")
         }
     })
 

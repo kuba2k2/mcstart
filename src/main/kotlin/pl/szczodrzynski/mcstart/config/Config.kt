@@ -15,6 +15,8 @@ class Config {
 
     private val dotenv = Dotenv()
 
+    val debug = getBoolean("DEBUG") ?: false
+
     val serverPath = dotenv["SERVER_PATH"] ?: "."
 
     private val properties = Dotenv(serverPath, "server.properties")
