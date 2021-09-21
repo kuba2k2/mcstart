@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
     # attach a named volume with the server's data
     volumes:
-     - mc1:/data
+      - mc1:/data
 volumes:
   mc1: {}
 ```
