@@ -1,7 +1,7 @@
 # MCStart
 Automatically start a Minecraft server whenever a whitelisted player tries to join.
 
-[Download v1.0.2](https://github.com/kuba2k2/mcstart/releases/tag/v1.0.2)
+[Download v1.1.0](https://github.com/kuba2k2/mcstart/releases/tag/v1.1.0)
 
 ## Usage
 
@@ -36,7 +36,7 @@ services:
     image: kuba2k2/mcstart:latest-java8
     # set the external server port (do not change the second number)
     ports:
-      - 25565:25565
+      - "25565:25565"
     tty: true
     stdin_open: true
     # restart the container on reboots
@@ -45,7 +45,7 @@ services:
     volumes:
       - mc1:/data
 volumes:
-  mc1: {}
+  mc1: { }
 ```
 (this sample file is available [here](https://raw.githubusercontent.com/kuba2k2/mcstart/master/docker-compose.yml))
 

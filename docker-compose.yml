@@ -13,7 +13,7 @@ services:
     image: kuba2k2/mcstart:latest-java8
     # set the external server port (do not change the second number)
     ports:
-      - 25565:25565
+      - "25565:25565"
     tty: true
     stdin_open: true
     # restart the container on reboots
@@ -22,4 +22,4 @@ services:
     volumes:
       - mc1:/data
 volumes:
-  mc1: {}
+  mc1: { }
