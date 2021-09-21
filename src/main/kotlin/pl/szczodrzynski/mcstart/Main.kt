@@ -6,7 +6,8 @@ package pl.szczodrzynski.mcstart
 
 import pl.szczodrzynski.mcstart.config.Config
 import pl.szczodrzynski.mcstart.ext.DEBUG
-import pl.szczodrzynski.mcstart.ext.log
+import pl.szczodrzynski.mcstart.mc.GracefulShutdownHook
+import pl.szczodrzynski.mcstart.mc.McServer
 import pl.szczodrzynski.mcstart.tcp.TcpServer
 
 fun main(args: Array<String>) {
@@ -15,7 +16,7 @@ fun main(args: Array<String>) {
     val config = Config()
     if (config.debug) {
         DEBUG = true
-        println("Loaded configuration: $config")
+        println("Loaded configuration: $config".replace("\n", "\\n"))
         println("Loaded whitelist: ${config.whitelist}")
         println("Server command line: ${args.joinToString(" ")}")
     }
@@ -25,13 +26,7 @@ fun main(args: Array<String>) {
     }
 
     // wait for MC server to exit gracefully on SIGTERM
-    Runtime.getRuntime().addShutdownHook(object : Thread() {
-        override fun run() {
-            log("Shutdown hook called")
-            McServer.process?.waitFor()
-            log("Process finished")
-        }
-    })
+    GracefulShutdownHook(config)
 
     while (true) {
         TcpServer(config) // wait for a privileged player to join

@@ -12,12 +12,14 @@ import java.net.Socket
 class ClientHandlerThread(
     private val config: Config,
     private val client: Socket,
-    private val onServerClose: (username: String) -> Unit
+    private val onServerClose: (username: String) -> Unit,
+    private val onClose: (it: ClientHandlerThread) -> Unit,
 ) : CoroutineScope {
 
     override val coroutineContext = Job() + Dispatchers.IO
 
     private var clientIsLegacy = false
+
     // the client's protocol version sent in Handshake
     var modernProtocolVersion = 0
 
@@ -34,8 +36,8 @@ class ClientHandlerThread(
                 }
             }
             debug("Socket closed.")
-            client.close()
-            cancel()
+            close()
+            onClose(this@ClientHandlerThread)
         }
     }
 
@@ -52,9 +54,13 @@ class ClientHandlerThread(
         if (packet.isLegacy) {
             clientIsLegacy = true
             PacketHandlerLegacy(config, client, packet, onServerClose)
-        }
-        else {
+        } else {
             PacketHandlerModern(config, client, this, packet, onServerClose)
         }
+    }
+
+    fun close() {
+        client.close()
+        cancel()
     }
 }

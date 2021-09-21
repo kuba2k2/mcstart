@@ -64,9 +64,20 @@ You can use color codes (`&`) in all string properties (well, except hostnames).
 
 The `$USERNAME` placeholder is available in `MCS_MSG_STARTING` and `MCS_MSG_NOT_WHITELISTED`.
 
+### Graceful Shutdown
+
+A SIGTERM sent to the MCStart process can send a "stop" command (`MCS_SHUTDOWN_COMMAND`) to the server, allowing it to save the data before stopping. Additionally, when running in a Docker container with `mc-server-runner` enabled, the SIGTERM will be forwarded to that process to let it handle the shutdown. `MCS_GRACEFUL_SHUTDOWN` is enabled by default.
+
+If `MCS_GRACEFUL_SHUTDOWN` is disabled, the server is __still__ terminated/killed without the "stop" command.
+
+**Note:** After each `MCS_GRACEFUL_SHUTDOWN_TIMEOUT` seconds, the termination step advances:
+- graceful ("stop" command) - only without `mc-server-runner`
+- SIGTERM - if graceful shutdown fails after the timeout
+- SIGKILL - if all the steps above fail
+
 ### Auto Stop
 
-MCStart can automatically stop the server if no players are online, to save resources. It works by querying the server status periodically and running the `MCS_AUTO_STOP_COMMAND` (`stop` by default) after a configurable timeout. The feature works on all servers supporting the legacy Server List Ping protocol (tested on vanilla 1.2.5, 1.6.4, 1.7.2, 1.17.1, but should work on all versions).
+MCStart can automatically stop the server if no players are online, to save resources. It works by querying the server status periodically and running the `MCS_SHUTDOWN_COMMAND` (`stop` by default) after a configurable timeout. The feature works on all servers supporting the legacy Server List Ping protocol (tested on vanilla 1.2.5, 1.6.4, 1.7.2, 1.17.1, but should work on all versions).
 
 - `MCS_AUTO_STOP_POLLING_DELAY` - used to start querying the server after a delay from the time it's started by a joining player
 - `MCS_AUTO_STOP_POLLING_INTERVAL` - how often to query the server

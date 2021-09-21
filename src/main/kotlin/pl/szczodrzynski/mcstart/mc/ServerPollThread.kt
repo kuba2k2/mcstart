@@ -2,7 +2,7 @@
  * Copyright (c) Kuba Szczodrzyński 2021-9-18.
  */
 
-package pl.szczodrzynski.mcstart
+package pl.szczodrzynski.mcstart.mc
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +21,7 @@ import java.net.Socket
 
 class ServerPollThread(
     private val config: Config,
-    private val onShutdown: () -> Unit
+    private val serverStop: () -> Unit
 ) : CoroutineScope {
 
     override val coroutineContext = Job() + Dispatchers.IO
@@ -60,7 +60,15 @@ class ServerPollThread(
         shutdownJob = startCoroutineTimer(
             delayMillis = config.autoStopTimeout * 1000L
         ) {
-            shutdown()
+            if (!isServerEmpty()) {
+                debug("Shutdown called but server not empty, aborting.")
+                scheduleTimer()
+                return@startCoroutineTimer
+            }
+
+            log("Shutting down the server.")
+            serverStop()
+            cancel()
         }
     }
 
@@ -93,17 +101,5 @@ class ServerPollThread(
             debug("Status check failed: $e")
         }
         return false
-    }
-
-    private fun shutdown() {
-        if (!isServerEmpty()) {
-            debug("Shutdown called but server not empty, aborting.")
-            scheduleTimer()
-            return
-        }
-
-        log("Shutting down the server.")
-        onShutdown()
-        cancel()
     }
 }
