@@ -66,7 +66,7 @@ class ServerPollThread(
 
     private fun isServerEmpty(): Boolean {
         try {
-            val socket = Socket(config.autoStopServer, config.serverPort)
+            val socket = Socket(config.autoStopServer, config.autoStopPort)
 
             packet.write(socket)
 

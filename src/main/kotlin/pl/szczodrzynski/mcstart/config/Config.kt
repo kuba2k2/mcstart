@@ -31,6 +31,7 @@ class Config {
 
     val autoStop = getBoolean("MCS_AUTO_STOP") ?: false
     val autoStopServer = getString("MCS_AUTO_STOP_HOSTNAME") ?: "localhost"
+    val autoStopPort = getInt("MCS_AUTO_STOP_PORT") ?: serverPort
     val autoStopPollingDelay = getInt("MCS_AUTO_STOP_POLLING_DELAY") ?: 60
     val autoStopPollingInterval = getInt("MCS_AUTO_STOP_POLLING_INTERVAL") ?: 10
     val autoStopTimeout = getInt("MCS_AUTO_STOP_TIMEOUT") ?: (10 * 60)
