@@ -15,7 +15,6 @@ class TcpServer(
 
     private val server = ServerSocket(config.serverPort)
     private var serverClosed = false
-    private val clients = mutableListOf<ClientHandlerThread>()
 
     init {
         println("----")
@@ -39,32 +38,24 @@ class TcpServer(
         while (!server.isClosed) {
             try {
                 val socket = server.accept()
-                val client = ClientHandlerThread(
+                ClientHandlerThread(
                     config = config,
                     client = socket,
                     onServerClose = this::onServerClose,
-                    onClose = {
-                        // remove the closed client
-                        clients.remove(it)
-                    },
                 )
-                // store the client for cancelling
-                clients.add(client)
             } catch (e: Exception) {
                 if (!serverClosed)
                     log("!!! The server threw an Exception: $e")
             }
         }
 
-        // close all sockets
-        cleanupJobs()
+        // stop the server
+        stopServer()
         // unsubscribe from input
         Console.unsubscribe(this)
     }
 
-    private fun cleanupJobs() {
-        // close all client sockets
-        clients.onEach { it.close() }
+    private fun stopServer() {
         // stop the TCP server
         serverClosed = true
         server.close()
@@ -72,7 +63,7 @@ class TcpServer(
 
     private fun onServerClose(username: String) {
         log("Server started by '$username', shutting down TCP listener")
-        // close all sockets
-        cleanupJobs()
+        // stop the server
+        stopServer()
     }
 }

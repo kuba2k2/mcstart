@@ -13,7 +13,6 @@ class ClientHandlerThread(
     private val config: Config,
     private val client: Socket,
     private val onServerClose: (username: String) -> Unit,
-    private val onClose: (it: ClientHandlerThread) -> Unit,
 ) : CoroutineScope {
 
     override val coroutineContext = Job() + Dispatchers.IO
@@ -36,8 +35,8 @@ class ClientHandlerThread(
                 }
             }
             debug("Socket closed.")
-            close()
-            onClose(this@ClientHandlerThread)
+            client.close()
+            cancel()
         }
     }
 
@@ -57,10 +56,5 @@ class ClientHandlerThread(
         } else {
             PacketHandlerModern(config, client, this, packet, onServerClose)
         }
-    }
-
-    fun close() {
-        client.close()
-        cancel()
     }
 }
