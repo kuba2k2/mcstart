@@ -39,7 +39,7 @@ class Config {
 
     private val dotenv = Dotenv()
 
-    val debug = getBoolean("DEBUG") ?: false
+    val debug = getBoolean("MCS_DEBUG") ?: false
 
     val serverPath = dotenv["SERVER_PATH"] ?: "."
 
