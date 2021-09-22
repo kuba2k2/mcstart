@@ -20,9 +20,6 @@ class TcpServer(
         println("----")
         log("Server running on port ${server.localPort}")
 
-        // flush all available input
-        System.`in`.skip(System.`in`.available().toLong())
-
         // handle commands on stdin
         Console.subscribe(this) { command ->
             if (command.isBlank())
