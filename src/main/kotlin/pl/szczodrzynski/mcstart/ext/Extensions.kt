@@ -7,6 +7,7 @@ package pl.szczodrzynski.mcstart.ext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.text.Normalizer
 
 var DEBUG = false
 
@@ -27,6 +28,23 @@ fun varLength(number: Int): Int {
 }
 
 fun String.convertFormat(): String = replace('&', '§')
+fun String.unconvertFormat(): String = replace('§', '&')
+
+fun String.stripFormat(): String = this
+    .unconvertFormat()
+    .replace("&[0-9A-z]".toRegex(), "")
+
+fun String.nl2ws() = replace('\n', ' ')
+
+fun String.normalize(): String {
+    val text = this
+        .unconvertFormat()
+        .replace("ł", "l")
+        .replace("Ł", "L")
+    return Normalizer.normalize(text, Normalizer.Form.NFKD)
+        .replace("[^\\p{ASCII}]".toRegex(), "")
+        .convertFormat()
+}
 
 inline val Int.b get() = this.toByte()
 

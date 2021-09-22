@@ -57,7 +57,7 @@ class PacketHandlerModern(
         // should kick the player already here
         is ModernServerLoginStart -> {
             val reason = handleHandshake(packet.username)
-            ModernClientDisconnect(reason).write(client)
+            ModernClientDisconnect.with(reason).write(client)
             client.close()
         }
         else -> log("Unknown packet received: $packet")

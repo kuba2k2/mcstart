@@ -4,6 +4,8 @@
 
 package pl.szczodrzynski.mcstart.packet
 
+import pl.szczodrzynski.mcstart.ext.convertFormat
+import pl.szczodrzynski.mcstart.ext.nl2ws
 import pl.szczodrzynski.mcstart.ext.readStringLegacy
 import pl.szczodrzynski.mcstart.ext.writeStringLegacy
 import java.io.InputStream
@@ -21,6 +23,11 @@ class LegacyClientDisconnect(
                 reason = reason,
             )
         }
+
+        fun with(reason: String, stripNewline: Boolean = false) = LegacyClientDisconnect(
+            if (stripNewline) reason.convertFormat().nl2ws()
+            else reason.convertFormat()
+        )
     }
 
     override fun serialize(): ByteArray {

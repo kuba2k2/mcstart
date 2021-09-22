@@ -25,13 +25,17 @@ class ModernClientDisconnect(
                     .get("text")
                     .asString,
             )
+
+        fun with(reason: String) = ModernClientDisconnect(
+            reason.convertFormat()
+        )
     }
 
     override fun serialize(): ByteArray {
         val output = mutableListOf<Byte>()
 
         val json = Json.obj {
-            "text" to reason.convertFormat()
+            "text" to reason
         }
         output.writeString(json.toString())
 

@@ -52,12 +52,12 @@ class PacketHandlerLegacy(
         }
         is LegacyServerHandshake16 -> {
             val reason = handleHandshake(packet.username)
-            LegacyClientDisconnect(reason).write(client)
+            LegacyClientDisconnect.with(reason).write(client)
             client.close()
         }
         is LegacyServerHandshake13 -> {
             val reason = handleHandshake(packet.username)
-            LegacyClientDisconnect(reason).write(client)
+            LegacyClientDisconnect.with(reason, stripNewline = true).write(client)
             client.close()
         }
         else -> log("Unknown packet received: $packet")

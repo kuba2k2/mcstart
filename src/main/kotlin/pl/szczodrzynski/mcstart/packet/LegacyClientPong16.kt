@@ -5,7 +5,8 @@
 package pl.szczodrzynski.mcstart.packet
 
 import pl.szczodrzynski.mcstart.config.Config
-import pl.szczodrzynski.mcstart.ext.convertFormat
+import pl.szczodrzynski.mcstart.ext.nl2ws
+import pl.szczodrzynski.mcstart.ext.normalize
 import pl.szczodrzynski.mcstart.ext.readStringLegacy
 import pl.szczodrzynski.mcstart.ext.writeStringLegacy
 import java.io.InputStream
@@ -39,8 +40,8 @@ class LegacyClientPong16(
                     protocol ?: config.versionProtocol
                 else
                     config.versionProtocol,
-                versionName = config.versionName.convertFormat(),
-                motdText = config.motdText.convertFormat(),
+                versionName = config.versionName.normalize(),
+                motdText = config.motdText.normalize().nl2ws(),
                 playersOnline = config.playersOnline,
                 playersMax = config.playersMax,
             )

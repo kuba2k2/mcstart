@@ -5,9 +5,7 @@
 package pl.szczodrzynski.mcstart.packet
 
 import pl.szczodrzynski.mcstart.config.Config
-import pl.szczodrzynski.mcstart.ext.convertFormat
-import pl.szczodrzynski.mcstart.ext.readStringLegacy
-import pl.szczodrzynski.mcstart.ext.writeStringLegacy
+import pl.szczodrzynski.mcstart.ext.*
 import java.io.InputStream
 
 class LegacyClientPong13(
@@ -31,9 +29,9 @@ class LegacyClientPong13(
 
         fun buildUsing(config: Config) =
             LegacyClientPong13(
-                motdText = config.motdText.convertFormat(),
+                motdText = config.motdText.normalize().stripFormat().nl2ws(),
                 playersOnline = config.playersOnline,
-                playersMax = config.playersMax,
+                playersMax = config.playersMax.coerceAtLeast(1),
             )
     }
 
