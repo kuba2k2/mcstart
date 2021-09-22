@@ -27,6 +27,12 @@ class TcpServer(
             when (command.lowercase()) {
                 "start" -> onServerClose("CONSOLE")
                 "exit", "stop" -> Runtime.getRuntime().exit(0)
+                "help" -> println("""
+                    Available commands:
+                        start - run the MC server manually
+                        exit - quit MC start
+                        stop - same as exit
+                """.trimIndent())
                 else -> println("Unknown command: $command")
             }
         }
