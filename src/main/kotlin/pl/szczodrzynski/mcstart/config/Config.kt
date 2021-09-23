@@ -37,6 +37,15 @@ class Config {
         File("/usr/local/bin/mc-server-runner").exists()
     }
 
+    val faviconFile by lazy {
+        val file = File(faviconFilename)
+        when {
+            !faviconShow -> null
+            file.isAbsolute -> file
+            else -> File(serverPath, faviconFilename)
+        }
+    }
+
     private val dotenv = Dotenv()
 
     val debug = getBoolean("MCS_DEBUG") ?: false
@@ -77,6 +86,9 @@ class Config {
     val disconnectText = getString("MCS_MSG_NOT_WHITELISTED")
         ?: "You are not whitelisted to start this server."
 
+    val faviconShow = getBoolean("MCS_SERVER_ICON") ?: true
+    val faviconFilename = getString("MCS_SERVER_ICON_FILE") ?: "server-icon.png"
+
     val whitelistEnabled = getBoolean("MCS_WHITELIST")
         ?: getBoolean("ENABLE_WHITELIST")
         ?: false
@@ -101,6 +113,6 @@ class Config {
     private fun getBoolean(name: String) = getString(name)?.toBoolean()
 
     override fun toString(): String {
-        return "Config(debug=$debug, serverPath='$serverPath', serverPort=$serverPort, socketTimeout=$socketTimeout, matchProtocolModern=$matchProtocolModern, matchProtocolLegacy=$matchProtocolLegacy, versionProtocol=$versionProtocol, versionName='$versionName', shutdownCommand='$shutdownCommand', gracefulShutdown=$gracefulShutdown, gracefulShutdownTimeout=$gracefulShutdownTimeout, autoStop=$autoStop, autoStopServer='$autoStopServer', autoStopPort=$autoStopPort, autoStopPollingDelay=$autoStopPollingDelay, autoStopPollingInterval=$autoStopPollingInterval, autoStopTimeout=$autoStopTimeout, playersOnline=$playersOnline, playersMax=$playersMax, motdText='$motdText', startingText='$startingText', disconnectText='$disconnectText', whitelistEnabled=$whitelistEnabled, whitelistUseServer=$whitelistUseServer, whitelistFile=$whitelistFile, whitelist=$whitelist)"
+        return "Config(debug=$debug, serverPath='$serverPath', serverPort=$serverPort, socketTimeout=$socketTimeout, matchProtocolModern=$matchProtocolModern, matchProtocolLegacy=$matchProtocolLegacy, versionProtocol=$versionProtocol, versionName='$versionName', shutdownCommand='$shutdownCommand', gracefulShutdown=$gracefulShutdown, gracefulShutdownTimeout=$gracefulShutdownTimeout, autoStop=$autoStop, autoStopServer='$autoStopServer', autoStopPort=$autoStopPort, autoStopPollingDelay=$autoStopPollingDelay, autoStopPollingInterval=$autoStopPollingInterval, autoStopTimeout=$autoStopTimeout, playersOnline=$playersOnline, playersMax=$playersMax, motdText='$motdText', startingText='$startingText', disconnectText='$disconnectText', faviconShow=$faviconShow, faviconFilename='$faviconFilename', whitelistEnabled=$whitelistEnabled, whitelistUseServer=$whitelistUseServer, whitelistFile=$whitelistFile, whitelist=$whitelist)"
     }
 }

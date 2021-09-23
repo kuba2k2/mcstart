@@ -7,7 +7,10 @@ package pl.szczodrzynski.mcstart.ext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
+import java.nio.file.Files
 import java.text.Normalizer
+import java.util.*
 
 var DEBUG = false
 
@@ -84,4 +87,11 @@ fun Process.getPid(): Long {
     val pid = callSuperMethod(name = "pid")     /* Java 9+ */
         ?: readField(name = "pid")              /* Java <=8, Unix */
     return (pid as? Long) ?: (pid as? Int)?.toLong() ?: -1L
+}
+
+fun File.asBase64(): String {
+    val mimeType = Files.probeContentType(this.toPath())
+    val data = this.readBytes()
+    val base64 = Base64.getEncoder().encodeToString(data)
+    return "data:$mimeType;base64,$base64"
 }

@@ -1,6 +1,8 @@
 # MCStart
 Automatically start a Minecraft server whenever a whitelisted player tries to join.
 
+The Docker image for MCStart is a drop-in replacement for [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/) and is (mostly) fully compatible with all its options.
+
 [Download v1.1.3](https://github.com/kuba2k2/mcstart/releases/tag/v1.1.3)
 
 ## Usage
@@ -10,8 +12,6 @@ The project is now best suited for usage with Docker (or Docker Compose). An exa
 The legacy simple command guide is attached at the end of this README.
 
 ### With Docker Compose
-
-The MCStart Docker image is based on [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/), making most its options available.
 
 - Create an `mcstart.env` file with your configuration options of choice. You can use the [sample file `.env.example`](https://raw.githubusercontent.com/kuba2k2/mcstart/master/.env.example).
 - Configure the file according to **Configuration** section below.
@@ -109,6 +109,10 @@ MCS_VERSION_PROTOCOL=1 # set this to the correct protocol version
 # MC 1.3 and older
 # settings don't matter here
 ```
+
+### Server Icon
+
+Starting with v1.2.0 MCStart sends the `server-icon.png` by default, for clients issuing the server list ping. This can be disabled with `MCS_SERVER_ICON` or a custom file name/path may be set with `MCS_SERVER_ICON_FILE`.
 
 ### Whitelist
 

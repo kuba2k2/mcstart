@@ -9,6 +9,7 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import pl.szczodrzynski.mcstart.Version
 import pl.szczodrzynski.mcstart.config.Config
+import pl.szczodrzynski.mcstart.ext.asBase64
 import pl.szczodrzynski.mcstart.ext.convertFormat
 import pl.szczodrzynski.mcstart.ext.writeString
 import java.io.InputStream
@@ -46,6 +47,9 @@ class ModernClientResponse(
                         "text" to config.motdText.convertFormat()
                         "mcstart" to Version.CODE // to make MCStart detection easier (e.g. with mcstatus python lib)
                     }
+
+                    if (config.faviconFile?.canRead() == true)
+                        "favicon" to config.faviconFile!!.asBase64()
                 }
             )
     }
