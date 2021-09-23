@@ -5,7 +5,7 @@
 package pl.szczodrzynski.mcstart
 
 object Version {
-    const val CODE = "1.1.3"
+    const val CODE = "1.2.0"
     override fun toString(): String {
         return CODE
     }
