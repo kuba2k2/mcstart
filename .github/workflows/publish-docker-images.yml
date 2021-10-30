@@ -17,6 +17,9 @@ jobs:
           distribution: 'temurin'
           java-version: '11'
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Build release JAR
         uses: gradle/gradle-build-action@v2
         with:
