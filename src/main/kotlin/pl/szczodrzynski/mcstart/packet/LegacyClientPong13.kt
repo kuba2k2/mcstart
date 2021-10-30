@@ -19,11 +19,20 @@ class LegacyClientPong13(
     companion object {
         fun deserialize(input: InputStream): LegacyClientPong13 {
             val data = input.readStringLegacy()
-            val items = data.split('§')
+            // reverse split with limit
+            val items = data
+                .split('§')
+                .reversed()
+                .joinToString("§")
+                .split('§', limit = 3)
+            val motdText = items[2]
+                .split('§')
+                .reversed()
+                .joinToString("§")
             return LegacyClientPong13(
-                motdText = items[0],
+                motdText = motdText,
                 playersOnline = items[1].toIntOrNull() ?: 0,
-                playersMax = items[2].toIntOrNull() ?: 0,
+                playersMax = items[0].toIntOrNull() ?: 0,
             )
         }
 

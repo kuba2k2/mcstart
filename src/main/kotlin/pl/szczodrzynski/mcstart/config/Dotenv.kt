@@ -39,6 +39,6 @@ class Dotenv(
         entriesInFile
     else entries()
 
-    override fun get(key: String) = System.getenv(key) ?: envVars[key]
+    override operator fun get(key: String) = System.getenv(key) ?: envVars[key]
     override fun get(key: String, defaultValue: String) = get(key) ?: defaultValue
 }
