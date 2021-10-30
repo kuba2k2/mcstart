@@ -1,4 +1,11 @@
+buildscript {
+    dependencies {
+        classpath 'com.guardsquare:proguard-gradle:7.1.0'
+    }
+}
+
 plugins {
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.5.30'
 }
@@ -25,4 +32,44 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'pl.szczodrzynski.mcstart.MainKt'
+    }
+}
+
+shadowJar {
+    destinationDir = new File("${buildDir}/artifacts/")
+    archiveBaseName = 'mcstart'
+    archiveClassifier = 'fat'
+    exclude '**/*.kotlin_metadata'
+    exclude '**/*.kotlin_module'
+    exclude '**/*.kotlin_builtins'
+    exclude '**/module-info.class'
+    exclude 'META-INF/maven/**'
+    minimize()
+}
+
+task proguard(type: proguard.gradle.ProGuardTask) {
+    dependsOn shadowJar
+    injars shadowJar
+    outjars "${buildDir}/artifacts/mcstart-${project.version}.jar"
+
+    dontwarn
+    keep 'class pl.szczodrzynski.mcstart.MainKt { *; }'
+
+    if (System.getProperty('java.version').startsWith('1.')) {
+        // Before Java 9, the runtime classes were packaged in a single jar file.
+        libraryjars "${System.getProperty('java.home')}/lib/rt.jar"
+    } else {
+        // As of Java 9, the runtime classes are packaged in modular jmod files.
+        libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+    }
+}
+
+task releaseMinified(type: Delete) {
+    dependsOn proguard
+    delete files(shadowJar)
 }
