@@ -3,7 +3,7 @@ Automatically start a Minecraft server whenever a whitelisted player tries to jo
 
 The Docker image for MCStart is a drop-in replacement for [itzg/minecraft-server](https://hub.docker.com/r/itzg/minecraft-server/) and is (mostly) fully compatible with all its options.
 
-[Download v1.2.0](https://github.com/kuba2k2/mcstart/releases/tag/v1.2.0)
+[Download v1.2.1](https://github.com/kuba2k2/mcstart/releases/tag/v1.2.1)
 
 ## Usage
 
