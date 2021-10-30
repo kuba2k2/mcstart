@@ -36,11 +36,16 @@ jobs:
         id: version
         run: echo "::set-output name=version::${{ steps.release.outputs.latest_tag }}" | sed 's/::v/::/'
 
-      - name: Upload release artifact
+      - name: Upload workflow artifact
         uses: actions/upload-artifact@v2
         with:
           name: mcstart-${{ steps.version.outputs.version }}.jar
           path: build/artifacts/mcstart-${{ steps.version.outputs.version }}.jar
+
+      - name: Upload GitHub release asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/artifacts/mcstart-${{ steps.version.outputs.version }}.jar
 
   build:
     strategy:
